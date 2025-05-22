@@ -47,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($pengurus as $item)
+                        @foreach ($coache as $item)
                             <tr>
                                 <td>1</td>
                                 <td>{{ $item->full_name }}</td>
