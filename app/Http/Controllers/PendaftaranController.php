@@ -2,56 +2,107 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PendaftaranController extends Controller
 {
+    public function index()
+    {
+        $pendaftarans = Pendaftaran::all();
+        return view('Pengguna.pendaftaran', compact('pendaftarans'));
+    }
+
     public function store(Request $request)
     {
-        // Validasi data form
-        $request->validate([
-            'nama' => 'required|string|max:255',
+        $validated = $request->validate([
+            'nama_pendaftar' => 'required|string|max:255',
             'nik' => 'required|string|max:20',
+            'nomor_telepon' => 'required|string|max:15',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'alamat' => 'required|string',
             'sekolah' => 'required|string|max:255',
             'kelas' => 'required|string|max:100',
-            'akta_kelahiran' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'kartu_keluarga' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'pas_foto' => 'required|file|mimes:jpg,jpeg,png|max:2048',
-            'raport_terakhir' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'tes_psikologi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_akta' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_kk' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_foto' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'file_raport' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_psikolog' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        // Simpan file upload ke storage
-        $akta = $request->file('akta_kelahiran')->store('uploads/akta');
-        $kk = $request->file('kartu_keluarga')->store('uploads/kk');
-        $foto = $request->file('pas_foto')->store('uploads/foto');
-        $raport = $request->file('raport_terakhir')->store('uploads/raport');
-        $psikologi = $request->file('tes_psikologi')->store('uploads/psikologi');
-        
-        // Simpan semua ke database (ke tabel tb_pendaftaran)
-        DB::table('tb_pendaftaran')->insert([
-            'nama_pendaftar' => $request->nama,
-            'nik' => $request->nik,
-            'jenis_kelamin' => $request->jenis_kelamin === 'Laki-laki' ? 'L' : 'P',
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'alamat' => $request->alamat,
-            'sekolah' => $request->sekolah,
-            'kelas' => $request->kelas,
-            'file_akta' => $akta,
-            'file_kk' => $kk,
-            'file_foto' => $foto,
-            'file_raport' => $raport,
-            'file_psikolog' => $psikologi,
-            'tanggal_daftar' => now(),
-            'status_verifikasi' => 'N'
+        $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
+        $data['slug'] = Str::slug($request->nama_pendaftar . '-' . now()->timestamp);
+
+        $data['file_akta'] = $request->file('file_akta')->store('berkas');
+        $data['file_kk'] = $request->file('file_kk')->store('berkas');
+        $data['file_foto'] = $request->file('file_foto')->store('berkas');
+        $data['file_raport'] = $request->file('file_raport')->store('berkas');
+        $data['file_psikolog'] = $request->file('file_psikolog')->store('berkas');
+
+        Pendaftaran::create($data);
+
+        return redirect('pengguna/pendaftaran')->withToastSuccess('Pendaftaran berhasil ditambahkan!');
+    }
+
+    public function edit($slug)
+    {
+        $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
+        return view('Pengguna.pendaftaranEdit', compact('pendaftaran'));
+    }
+
+    public function update(Request $request, $slug)
+    {
+        $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
+
+        $validated = $request->validate([
+            'nama_pendaftar' => 'required|string|max:255',
+            'nik' => 'required|string|max:20',
+            'nomor_telepon' => 'required|string|max:15',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'tempat_lahir' => 'required|string|max:100',
+            'tanggal_lahir' => 'required|date',
+            'alamat' => 'required|string',
+            'sekolah' => 'required|string|max:255',
+            'kelas' => 'required|string|max:100',
+            'file_akta' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_kk' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+            'file_raport' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_psikolog' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        return redirect()->route('riwayat')->with('success', 'Pendaftaran berhasil disimpan!');
+        $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
+
+        foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {
+            if ($request->hasFile($fileField)) {
+                if ($pendaftaran->$fileField && Storage::exists($pendaftaran->$fileField)) {
+                    Storage::delete($pendaftaran->$fileField);
+                }
+                $data[$fileField] = $request->file($fileField)->store('berkas');
+            }
+        }
+
+        $pendaftaran->update($data);
+
+        return redirect('pengguna/pendaftaran')->withToastSuccess('Pendaftaran berhasil diperbarui!');
+    }
+
+    public function hapus($slug)
+    {
+        $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
+
+        foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {
+            if ($pendaftaran->$fileField && Storage::exists($pendaftaran->$fileField)) {
+                Storage::delete($pendaftaran->$fileField);
+            }
+        }
+
+        $pendaftaran->delete();
+
+        return redirect()->route('pendaftaran.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
     }
 }

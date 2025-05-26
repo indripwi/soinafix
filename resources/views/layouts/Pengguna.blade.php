@@ -26,6 +26,8 @@
 
     <!-- Main CSS File -->
     <link href="{{ asset('Mentor/assets/css/main.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'mentor/assets/css/main.css' %}">
+
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap"

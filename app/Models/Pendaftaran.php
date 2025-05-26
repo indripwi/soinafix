@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pendaftaran extends Model
 {
     use HasFactory;
-    use Sluggable;
 
     protected $fillable = [
         'user_id',
@@ -31,21 +29,10 @@ class Pendaftaran extends Model
         'tanggal_daftar',
         'status_verifikasi',
         'periode',
-        'created_at',
     ];
 
-     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'user_id'
-            ]
-        ];
-    }
-
+    protected $casts = [
+        'tanggal_lahir' => 'date',
+        'tanggal_daftar' => 'datetime',
+    ];
 }

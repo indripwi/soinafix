@@ -29,12 +29,13 @@
             <div class="card-header">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Input Data Pengurus
-                </button>
+    <i class="fas fa-plus-circle me-1"></i> Input Data Pengurus
+</button>
+
             </div>
             <div class="card-body">
                 <div class="card-sub">
-                    <h3> Table Upload Pengurus </h3>
+                    <h3> Tabel Upload Pengurus </h3>
                 </div>
                 <table class="table table-striped mt-3">
                     <thead>
@@ -47,10 +48,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($coache as $item)
+                        @foreach ($coaches as $item)
                             <tr>
                                 <td>1</td>
                                 <td>{{ $item->full_name }}</td>
+                                <td>{{ $item->jabatan }}</td>
                                 <td>
                                     <img class="card-img-top"
                                         src="{{ $item->foto_url != null ? asset('storage/foto/' . $item->foto_url) : asset('img/foto-tidak-ada.png') }}"

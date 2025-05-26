@@ -29,8 +29,10 @@
             <div class="card-header">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Input Program
-                </button>
+    <i class="fas fa-plus-circle me-1"></i> Input Program
+</button>
+
+
             </div>
             <div class="card-body">
                 <div class="card-sub">

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('slug', 255)->nullable();
             $table->unsignedBigInteger('user_id')->nullable(); // NULLABLE agar bisa ON DELETE SET NULL
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-
             $table->string('nama_pendaftar', 100);
             $table->string('nik', 20);
             $table->string('nomor_telepon', 20);
@@ -35,10 +34,9 @@ return new class extends Migration
             $table->string('file_foto', 255);
             $table->string('file_raport', 255);
             $table->string('file_psikolog', 255);
-
             $table->timestamp('tanggal_daftar')->useCurrent();
             $table->enum('status_verifikasi', ['Menunggu', 'Lulus', 'Tidak Lulus'])->default('Menunggu');
-            $table->string('periode');
+            $table->string('periode')->nullable();
             $table->timestamps();
         });
     }

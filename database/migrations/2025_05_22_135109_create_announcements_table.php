@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
             $table->string('slug', 255)->nullable();
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->string('gambar_url')->nullable();
-            $table->string('pdf_file'); // nama file PDF
+            $table->string('pdf_file')->nullable(); // nama file PDF
             $table->timestamps();
         });
     }

@@ -32,18 +32,19 @@
         <div class="row">
 
           @foreach ($prestasi as $item)
-          <div class="col-md-6 d-flex align-items-stretch">
-            <div class="card">
-              <div class="card-img">
-                <img src="{{$item->foto_url != null ? asset('storage/foto/' . $item->foto_url) : asset('img/foto-tidak-ada.png') }}" alt="Card image cap">
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ $item->nama_atlet}}</h5>
-                <p class="fst-italic text-center">{{ $item->cabang_olahraga}}</p>
-                <p class="card-text">{{ $item->deskripsi}}</p>
-              </div>
-            </div>
-          </div>
+         <div class="col-12 col-sm-6 col-lg-4 d-flex align-items-stretch mb-4">
+  <div class="card">
+    <div class="card-img">
+      <img src="{{ $item->foto_url ? asset('storage/foto/' . $item->foto_url) : asset('img/foto-tidak-ada.png') }}" alt="Card image cap">
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{ $item->nama_atlet }}</h5>
+      <p class="fst-italic text-center">{{ $item->cabang_olahraga }}</p>
+      <p class="card-text">{{ $item->deskripsi }}</p>
+    </div>
+  </div>
+</div>
+
         @endforeach
           
         </div>

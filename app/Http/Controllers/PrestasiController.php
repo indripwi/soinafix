@@ -97,7 +97,7 @@ class PrestasiController extends Controller
         }
 
         // Update data lain
-        $prestasi->sport_name = $request->nama_atlet;
+        $prestasi->nama_atlet = $request->nama_atlet;
         $prestasi->slug = $request->slug;
         $prestasi->save();
 

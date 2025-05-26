@@ -1230,6 +1230,47 @@ section,
 .courses .trainer .trainer-rank .user-icon {
   font-size: 22px;
 }
+/* Penyesuaian untuk menyamakan tinggi gambar dan konten card */
+.courses .course-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 300px; /* samakan tinggi minimal semua card */
+}
+
+
+.courses .course-item img {
+  height: 180px; /* Bisa 160-200px tergantung keinginan */
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.courses .course-content {
+  padding: 10px; /* awalnya 15px */
+  flex-grow: 1;
+  min-height: 120px; /* atau lebih kecil jika perlu */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.courses .course-content h3 {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.courses .course-content .description {
+  font-size: 13px;
+  margin: 5px 0 0;
+}
+
+
+.courses .course-content .description {
+  margin-top: auto;
+}
 
 /*--------------------------------------------------------------
 # Trainers Index Section
@@ -1242,7 +1283,8 @@ section,
 }
 
 .trainers-index .member img {
-  margin: -1px -1px 30px -1px;
+  margin: 20px auto;
+
 }
 
 .trainers-index .member .member-content {
@@ -1286,6 +1328,16 @@ section,
   font-size: 18px;
   margin: 0 2px;
 }
+.trainers .member-img img { 
+  width: 160px;         /* Atur lebar tetap */
+  height: 160px;        /* Atur tinggi tetap */
+  object-fit: cover;    /* Pangkas gambar agar proporsional */
+  border-radius: 50%;   /* Supaya bulat sempurna */
+  display: block;
+  margin: 20px auto;    /* Tengah dan beri jarak */
+}
+
+
 
 /*--------------------------------------------------------------
 # About Us Section
@@ -1644,43 +1696,52 @@ body {
 }
 
 /*--------------------------------------------------------------
-# Events Section
+/* Events Section
 --------------------------------------------------------------*/
-.events .card {
-  background-color: var(--background-color);
-  border: 0;
-  padding: 0 30px;
-  margin-bottom: 60px;
-  position: relative;
+/* Pastikan ini override yang efektif */
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.events .card-img {
-  width: calc(100% + 60px);
-  margin-left: -30px;
+.card-img {
+  width: 100%;
+  height: 250px; /* atau ukuran tetap lainnya */
   overflow: hidden;
-  z-index: 9;
-  border-radius: 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+   background-color: #f8f9fa; /* atau warna lain agar kontras */
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.events .card-img img {
-  max-width: 100%;
-  transition: all 0.3s ease-in-out;
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* bisa juga coba 'cover' untuk lebih proporsional */
+  object-position: center;
+  display: block;
 }
 
+/* Konten kartu */
 .events .card-body {
-  z-index: 10;
-  background: var(--surface-color);
-  border-top: 4px solid var(--surface-color);
-  padding: 30px;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-  margin-top: -60px;
-  transition: 0.3s;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
 }
 
+/* Judul & teks */
 .events .card-title {
+  font-size: 1.1rem;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .events .card-title a {
@@ -1689,9 +1750,11 @@ body {
 }
 
 .events .card-text {
+  font-size: 0.9rem;
   color: color-mix(in srgb, var(--default-color), transparent 30%);
 }
 
+/* Hover effects */
 .events .card:hover img {
   transform: scale(1.1);
 }
@@ -1703,6 +1766,8 @@ body {
 .events .card:hover .card-body .card-title a {
   color: var(--accent-color);
 }
+
+
 
 /*--------------------------------------------------------------
 # Pricing Section

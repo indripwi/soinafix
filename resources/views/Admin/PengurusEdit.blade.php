@@ -15,7 +15,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ route('pengurus.update', $penguruss->slug) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('pengurus.update', $coache->slug) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="card-header">
@@ -33,7 +33,7 @@
                                             <input type="text"
                                                 class="form-control @error('full_name') is-invalid @enderror"
                                                 id="full_name" name="full_name"
-                                                value="{{ old('full_name', $penguruss->full_name) }}" required>
+                                                value="{{ old('full_name', $coache->full_name) }}" required>
                                             @error('full_name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -45,7 +45,7 @@
                                             <input type="text"
                                                 class="form-control @error('jabatan') is-invalid @enderror"
                                                 id="jabatan" name="jabatan"
-                                                value="{{ old('jabatan', $penguruss->jabatan) }}" required>
+                                                value="{{ old('jabatan', $coache->jabatan) }}" required>
                                             @error('jabatan')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -60,10 +60,10 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
 
-                                            @if ($penguruss->foto_url)
+                                            @if ($coache->foto_url)
                                                 <div class="mt-3">
                                                     <p>Gambar saat ini:</p>
-                                                    <img src="{{ asset('storage/foto/' . $penguruss->foto_url) }}"
+                                                    <img src="{{ asset('storage/foto/' . $coache->foto_url) }}"
                                                         alt="Gambar lama" style="max-width: 200px;">
                                                 </div>
                                             @endif

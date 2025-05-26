@@ -11,7 +11,7 @@ class PengurusController extends Controller
     public function index()
     {
         $coaches = Coache::all();
-        return view('Admin.adm_pengurus', compact('coache'));
+        return view('Admin.adm_pengurus', compact('coaches'));
     }
 
     public function store(Request $request)
@@ -38,7 +38,7 @@ class PengurusController extends Controller
             'image.string' => 'Gambar harus berupa path atau nama file yang valid.',
             'image.max'    => 'Nama file gambar maksimal 255 karakter.',
         ]);
-    }
+    
 
     $newName = '';
         if ($request->file('image')) {
@@ -50,7 +50,7 @@ class PengurusController extends Controller
 
         $pengurus = Coache::create($request->all());
         return redirect('admin/upload-pengurus')->withToastSuccess('Pengurus Berhasil Di Tambahkan!');
-    
+    }
 
     public function edit($slug)
     {
@@ -73,11 +73,6 @@ class PengurusController extends Controller
             'full_name.required' => 'Nama lengkap wajib diisi.',
             'full_name.string' => 'Nama lengkap harus berupa teks.',
             'full_name.max' => 'Nama lengkap tidak boleh lebih dari 255 karakter.',
-
-            'slug.required' => 'Slug wajib diisi.',
-            'slug.string'   => 'Slug harus berupa teks.',
-            'slug.max'      => 'Slug maksimal 255 karakter.',
-            'slug.unique'   => 'Slug sudah digunakan, silakan pilih yang lain.',
 
             'jabatan.required' => 'Jabatan wajib diisi.',
             'jabatan.string' => 'Jabatan harus berupa teks.',

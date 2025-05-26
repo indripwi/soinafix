@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Announcement;
+use App\Models\Coache;
+use App\Models\Pendaftaran;
 use App\Models\Prestasi;
 use App\Models\Program;
 use Illuminate\Http\Request;
@@ -14,11 +17,13 @@ class HomeController extends Controller
     }
     public function pengumuman()
     {
-        return view('Pengguna.pengumuman');
+        $announcement = Announcement::all();
+        return view('Pengguna.pengumuman', compact('announcement'));
     }
     public function pengurus()
     {
-        return view('Pengguna.pengurus');
+        $coache = Coache::all();
+        return view('Pengguna.pengurus', compact('coache'));
     }
     public function prestasi()
     {
@@ -32,7 +37,8 @@ class HomeController extends Controller
     }
     public function pendaftaran()
     {
-        return view('Pengguna.pendaftaran');
+        $pendaftaran = Pendaftaran::all();
+        return view('Pengguna.pendaftaran', compact('pendaftaran'));
     }
     public function tentang()
     {

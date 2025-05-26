@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pengumumans', function (Blueprint $table) {
+        Schema::create('user_biodatas', function (Blueprint $table) {
             $table->id();
-            $table->string('slug', 255)->nullable();
-            $table->string('judul'); // judul: VARCHAR (panjang default 255)
-            $table->string('file_pengumuman'); // file_pengumuman: VARCHAR (255)
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('nama_user')->nullable();
+            $table->string('email')->nullable();
+            $table->string('telepon')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pengumumans');
+        Schema::dropIfExists('user_biodatas');
     }
 };

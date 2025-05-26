@@ -12,7 +12,12 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PendaftarController;
 use App\Http\Controllers\PendaftarDetailController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\UserBiodataController;
+use App\Models\Pendaftaran;
+use App\Models\Pengumuman;
+use App\Models\Pengurus;
 use App\Models\Prestasi;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +34,6 @@ Route::get('/', [HomeController::class, 'homepage'])->name('homepage');
 Route::get('pengumuman', [HomeController::class, 'pengumuman'])->name('pengumuman');
 Route::get('pengurus', [HomeController::class, 'pengurus'])->name('pengurus');
 Route::get('pendaftaran', [HomeController::class, 'pendaftaran'])->name('pendaftaran');
-Route::post('pendaftaran', [HomeController::class, 'pendaftaran'])->name('pendaftaran');
 Route::get('prestasi', [HomeController::class, 'prestasi'])->name('prestasi');
 Route::get('program', [HomeController::class, 'program'])->name('program');
 Route::get('tentang', [HomeController::class, 'tentang'])->name('tentang');
@@ -58,5 +62,29 @@ Route::get('/admin/upload-pengurus-edit/{slug}', [PengurusController::class, 'ed
 Route::put('/admin/upload-pengurus-update/{slug}', [PengurusController::class, 'update'])->name('pengurus.update');
 Route::get('/admin/upload-pengurus-hapus/{slug}', [PengurusController::class, 'hapus'])->name('pengurus.hapus');
 Route::get('admin/upload-pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+Route::post('admin/upload-pengumuman-store', [PengumumanController::class, 'store'])->name('pengumuman.store');
+Route::get('/admin/upload-pengumuman-edit/{slug}', [PengumumanController::class, 'edit'])->name('pengumuman.edit');
+Route::put('/admin/upload-pengumuman-update/{slug}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+Route::get('/admin/upload-pengumuman-hapus/{slug}', [PengumumanController::class, 'hapus'])->name('pengumuman.hapus');
+Route::get('/pengumuman/download/{id}', [PengumumanController::class, 'download'])->name('pengumuman.download');
 Route::get('admin/pendaftar', [PendaftarController::class, 'index'])->name('pendaftar.index');
-Route::get('admin/pendaftardetail', [PendaftarDetailController::class, 'index'])->name('pendaftardetail.index');
+
+Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
+Route::post('pengguna/pendaftaran-store', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
+Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
+Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
+Route::get('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
+
+// Biodata Admin
+Route::get('admin/biodata', [UserBiodataController::class, 'show'])->name('admin.biodata');
+// Tampilkan halaman profil
+Route::get('admin/biodata', [UserBiodataController::class, 'show'])->name('profile.show');
+
+// Update data biodata
+Route::put('admin/biodata/update', [UserBiodataController::class, 'update'])->name('profile.update');
+
+// Ganti foto profil
+Route::put('admin/biodata/update-foto', [UserBiodataController::class, 'updateFoto'])->name('profile.updateFoto');
+
+// Ganti password
+Route::put('admin/biodata/update-password', [UserBiodataController::class, 'updatePassword'])->name('profile.updatePassword');
