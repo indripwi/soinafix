@@ -10,7 +10,6 @@ use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PendaftarController;
-use App\Http\Controllers\PendaftarDetailController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\UserBiodataController;
 use App\Models\Pendaftaran;
@@ -69,22 +68,17 @@ Route::get('/admin/upload-pengumuman-hapus/{slug}', [PengumumanController::class
 Route::get('/pengumuman/download/{id}', [PengumumanController::class, 'download'])->name('pengumuman.download');
 Route::get('admin/pendaftar', [PendaftarController::class, 'index'])->name('pendaftar.index');
 
+Route::get('admin/user', [UserBiodataController::class, 'index'])->name('user.index');
+Route::post('admin/user-store', [UserBiodataController::class, 'store'])->name('user.store');
+Route::get('admin/user-edit/{slug}', [UserBiodataController::class, 'edit'])->name('user.edit');
+Route::get('admin/user-hapus/{slug}', [UserBiodataController::class, 'hapus'])->name('user.hapus');
+Route::get('admin/user-create/', [UserBiodataController::class, 'create'])->name('user.create');
+
+Route::resource('user', UserBiodataController::class);
+
 Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
 Route::post('pengguna/pendaftaran-store', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
 Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
 Route::get('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
 
-// Biodata Admin
-Route::get('admin/biodata', [UserBiodataController::class, 'show'])->name('admin.biodata');
-// Tampilkan halaman profil
-Route::get('admin/biodata', [UserBiodataController::class, 'show'])->name('profile.show');
-
-// Update data biodata
-Route::put('admin/biodata/update', [UserBiodataController::class, 'update'])->name('profile.update');
-
-// Ganti foto profil
-Route::put('admin/biodata/update-foto', [UserBiodataController::class, 'updateFoto'])->name('profile.updateFoto');
-
-// Ganti password
-Route::put('admin/biodata/update-password', [UserBiodataController::class, 'updatePassword'])->name('profile.updatePassword');

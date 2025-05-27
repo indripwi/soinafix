@@ -111,9 +111,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('profile.show') }}">
+                            <a href="{{ route('user.index') }}">
                                 <i class="fas fa-user"></i>
-                                <p>Profil</p>
+                                <p>ADMIN</p>
                             </a>
                         </li>
 

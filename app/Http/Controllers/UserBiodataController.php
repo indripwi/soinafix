@@ -2,59 +2,107 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\User; // Ganti dengan nama model Anda jika bukan "User"
 use App\Models\UserBiodata;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class UserBiodataController extends Controller
 {
-    public function show()
+    // Tampilkan semua data
+    public function index()
     {
-        $user = Auth::user();
-        return view('admin.profile', compact('user'));
+        $users = UserBiodata::all();
+        return view('Admin.user', compact('users'));
     }
 
-    public function update(Request $request)
+    // Tampilkan form tambah data
+    public function create()
     {
-        $user = Auth::user();
-        $user->name = $request->name;
-        $user->save();
+        return view('user.create');
+    }
 
-        $user->profile->update([
-            'telepon' => $request->telepon,
-            'nik'     => $request->nik,
-            'alamat'  => $request->alamat,
+    // Simpan data baru
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_user' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'telepon' => 'required|string|max:20',
+            'alamat' => 'required|string',
+            'foto' => 'nullable|image|max:2048',
         ]);
 
-        return redirect()->route('profile.show')->with('success', 'Profil berhasil diperbarui.');
-    }
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->nama_user);
 
-    public function updateFoto(Request $request)
-    {
-        $user = Auth::user();
-
+        // Simpan file foto jika ada
         if ($request->hasFile('foto')) {
-            $filename = time() . '.' . $request->foto->extension();
-            $request->foto->storeAs('public/foto', $filename);
-
-            $user->profile->update(['foto' => $filename]);
+            $data['foto'] = $request->file('foto')->store('foto-users');
         }
 
-        return redirect()->route('profile.show')->with('success', 'Foto profil berhasil diperbarui.');
+        $data['user_id'] = auth()->id(); // Jika menggunakan autentikasi
+
+        User::create($data);
+
+        return redirect()->route('user.index')->with('success', 'Data berhasil ditambahkan.');
     }
 
-    public function updatePassword(Request $request)
+    // Tampilkan detail user
+    public function show($id)
     {
-        $user = Auth::user();
+        $user = User::findOrFail($id);
+        return view('user.show', compact('user'));
+    }
+
+    // Tampilkan form edit
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('user.edit', compact('user'));
+    }
+
+    // Simpan perubahan
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
         $request->validate([
-            'password' => 'required|string|min:6|confirmed', // kalau kamu pakai konfirmasi
+            'nama_user' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'telepon' => 'required|string|max:20',
+            'alamat' => 'required|string',
+            'foto' => 'nullable|image|max:2048',
         ]);
 
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->nama_user);
 
-        return redirect()->route('profile.show')->with('success', 'Password berhasil diperbarui.');
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($user->foto) {
+                Storage::delete($user->foto);
+            }
+            $data['foto'] = $request->file('foto')->store('foto-users');
+        }
+
+        $user->update($data);
+
+        return redirect()->route('user.index')->with('success', 'Data berhasil diperbarui.');
+    }
+
+    // Hapus data
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->foto) {
+            Storage::delete($user->foto);
+        }
+
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'Data berhasil dihapus.');
     }
 }

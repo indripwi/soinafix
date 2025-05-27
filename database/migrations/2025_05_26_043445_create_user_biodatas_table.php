@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('user_biodatas', function (Blueprint $table) {
             $table->id();
+            $table->string('slug', 255)->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nama_user')->nullable();
             $table->string('email')->nullable();
