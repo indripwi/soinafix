@@ -26,20 +26,21 @@
     <div class="container">
         <div class="card">
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Oops!</strong> Ada kesalahan pada input Anda:<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            <div class="alert alert-danger">
+                <strong>Oops!</strong> Ada kesalahan pada input Anda:<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
 
             @if (session('success'))
-                <script>
-                    toastr.success('{{ session('success') }}');
-                </script>
+            <script>
+                toastr.success('{{ session('
+                    success ') }}');
+            </script>
             @endif
 
             <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data" class="row g-3">
@@ -63,7 +64,7 @@
                 <div class="col-md-6 mb-3">
                     <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
                     <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
-                        <option value="">-- Pilih Jenis Kelamin --</option>
+                        <option value="">Jenis Kelamin</option>
                         <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                         <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                     </select>
@@ -98,16 +99,16 @@
                 <h5 class="mb-3">Upload Dokumen</h5>
 
                 @foreach ([
-                    'file_akta' => 'Akta Kelahiran',
-                    'file_kk' => 'Kartu Keluarga',
-                    'file_foto' => 'Pas Foto',
-                    'file_raport' => 'Raport Terakhir',
-                    'file_psikolog' => 'Tes Psikologi'
+                'file_akta' => 'Akta Kelahiran',
+                'file_kk' => 'Kartu Keluarga',
+                'file_foto' => 'Pas Foto',
+                'file_raport' => 'Raport Terakhir',
+                'file_psikolog' => 'Tes Psikologi'
                 ] as $name => $label)
-                    <div class="col-md-6 mb-3">
-                        <label for="{{ $name }}" class="form-label">{{ $label }}</label>
-                        <input class="form-control" type="file" id="{{ $name }}" name="{{ $name }}" required>
-                    </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ $name }}" class="form-label">{{ $label }}</label>
+                    <input class="form-control" type="file" id="{{ $name }}" name="{{ $name }}" required>
+                </div>
                 @endforeach
 
                 <div class="col-12 text-center mt-4">
@@ -143,40 +144,46 @@
                         </thead>
                         <tbody>
                             @foreach ($pendaftaran as $index => $item)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->nama_pendaftar }}</td>
-                                    <td>{{ $item->nik }}</td>
-                                    <td>{{ $item->nomor_telepon }}</td>
-                                    <td>{{ $item->jenis_kelamin }}</td>
-                                    <td>{{ $item->tempat_lahir }}</td>
-                                    <td>{{ $item->tanggal_lahir }}</td>
-                                    <td>{{ $item->alamat }}</td>
-                                    <td>{{ $item->sekolah }}</td>
-                                    <td>{{ $item->kelas }}</td>
-                                    @foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $file)
-                                        <td>
-                                            @if($item->$file)
-                                                <a href="{{ asset('storage/pendaftarans/' . $item->$file) }}" target="_blank">
-                                                    <i class="fas fa-file-pdf text-danger"></i> Unduh
-                                                </a>
-                                            @else
-                                                <em class="text-muted">-</em>
-                                            @endif
-                                        </td>
-                                    @endforeach
-                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
-                                    <td>
-                                      <a href="{{ route('pendaftaran.edit', ['slug' => $item->slug]) }}" class="btn btn-success btn-sm">Edit</a>
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item->nama_pendaftar }}</td>
+                                <td>{{ $item->nik }}</td>
+                                <td>{{ $item->nomor_telepon }}</td>
+                                <td>{{ $item->jenis_kelamin }}</td>
+                                <td>{{ $item->tempat_lahir }}</td>
+                                <td>{{ $item->tanggal_lahir }}</td>
+                                <td>{{ $item->alamat }}</td>
+                                <td>{{ $item->sekolah }}</td>
+                                <td>{{ $item->kelas }}</td>
+                                @foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $file)
+                                <td>
+                                    @if($item->$file)
+                                    <a href="{{ asset('storage/pendaftarans/' . $item->$file) }}" target="_blank">
+                                        <i class="fas fa-file-pdf text-danger"></i> Unduh
                                     </a>
-                                        <form action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}" method="POST">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-</form>
+                                    @else
+                                    <em class="text-muted">-</em>
+                                    @endif
+                                </td>
+                                @endforeach
+                                <td>{{ $item->created_at->format('d-m-Y') }}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('pendaftaran.edit', ['slug' => $item->slug]) }}" class="btn btn-success btn-sm">Edit</a>
 
-                                    </td>
-                                </tr>
+                                        <form action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                        </form>
+                                    </div>
+                                </td>
+
+
+
+
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
