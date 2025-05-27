@@ -12,6 +12,7 @@ use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PendaftarController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\UserBiodataController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Models\Pendaftaran;
 use App\Models\Pengumuman;
 use App\Models\Pengurus;
@@ -41,7 +42,8 @@ Route::get('riwayat', [RiwayatController::class, 'riwayat'])->name('riwayat');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login-masuk', [AuthController::class, 'process'])->name('login.process');
 
-
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 
 Route::get('admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashbord');

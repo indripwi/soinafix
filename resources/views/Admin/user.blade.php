@@ -80,5 +80,23 @@
         <img src="{{ asset('storage/' . $user->foto) }}" width="100" class="mt-2">
     @endif
 </div>
-
+ <button type="submit" class="btn btn-primary">Ubah Profil</button>
+{{-- Ubah Password --}}
+    <div class="row">
+        <div class="col-md-6">
+    
+                @csrf
+                @method('PUT')
+                <div class="mb-2">
+                    <label>Username</label>
+                    <input type="text" value="{{ $user->username }}" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label>Password Baru</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Ubah Password</button>
+            </form>
+        </div>
+    </div>
 @endsection
