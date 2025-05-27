@@ -44,12 +44,12 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header d-flex align-items-center" data-background-color="dark">
-                    <a href="index.html" class="logo d-flex align-items-center">
-                        <img src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}" alt="navbar brand"
-                            class="navbar-brand" height="20" />
-                        <span class="ms-2 text-white fw-bold" style="font-size: 12px;">ADMIN SOINA</span>
-                        <!-- ← Tambah teks di sini -->
-                    </a>
+                   <a href="index.html" class="logo d-flex align-items-center">
+    <img src="{{ asset('admin/img/soina.png') }}" alt="navbar brand"
+        class="navbar-brand mt-3" height="70" />
+    <span class="ms-3 text-white fw-bold d-inline-block mt-2" style="font-size: 12px; line-height: 2;">Special Olympics Indonesia</span>
+</a>
+
                     <div class="nav-toggle ms-auto">
                         <button class="btn btn-toggle toggle-sidebar">
                             <i class="gg-menu-right"></i>
