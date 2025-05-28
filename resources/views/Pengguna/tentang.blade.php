@@ -32,7 +32,7 @@
 
         <!-- Gambar -->
         <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
-          <img src="{{asset('Mentor/assets/img/about-2.jpg')}}" class="img-fluid" alt="Tentang SOINA">
+          <img src="{{asset('Mentor/assets/img/atlet-2.jpg')}}" class="img-fluid" alt="Tentang SOINA">
         </div>
 
         <!-- Teks Konten -->

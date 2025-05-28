@@ -53,11 +53,7 @@
               <li><a href="{{route('program')}}">Program</a></li>
               <li><a href="{{route('pengurus')}}">Pengurus</a></li>
               <li><a href="{{route('prestasi')}}">Prestasi</a></li>
-              <li class="dropdown"><a href="{{route('pendaftaran')}}"><span>Pendaftaran</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="{{route('riwayat')}}">Riwayat</a></li>
-                  <i class="mobile-nav-toggle d-none"></i>
-                </ul>
+              <li><a href="{{route('pendaftaran')}}">Pendaftaran</a></li>
               <li><a href="{{route('pengumuman')}}">Pengumuman</a></li>
               
           </nav>
