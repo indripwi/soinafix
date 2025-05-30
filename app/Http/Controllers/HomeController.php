@@ -12,9 +12,11 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function homepage()
-    {
-        return view('Pengguna.homepage');
-    }
+{
+    $programs = Program::latest()->take(4)->get();
+    $pengurus = Coache::latest()->take(3)->get();
+    return view('Pengguna.homepage', compact('programs', 'pengurus'));
+}
     public function pengumuman()
     {
         $announcement = Announcement::all();

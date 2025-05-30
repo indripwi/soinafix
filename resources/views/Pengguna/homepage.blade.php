@@ -54,65 +54,29 @@
         <p>Program SOIna</p>
         
       </div><!-- End Section Title -->
-      <div class="container">
+     <div class="container">
+    <div class="row">
+      @foreach($programs as $item)
+      <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+        <div class="course-item">
+          <img src="{{ asset('storage/foto/' . $item->gambar_url) }}" class="img-fluid" alt="">
+          <div class="course-content">
+            <h3>{{ $item->sport_name }}</h3>
+            <p class="description">{{ Str::limit($item->deskripsi, 100) }}</p>
+          </div>
+        </div>
+      </div>
+      @endforeach
+    </div>
 
-        <div class="row">
-      
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-            <div class="course-item">
-              <img src="{{asset('Mentor/assets/img/course-1.jpg')}}" class="img-fluid" alt="...">
-              <div class="course-content">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <p class="category">Web Development</p>
-                  
-                </div>
+   <div class="text-center mt-4">
+  <a href="{{ route('program') }}" class="btn rounded-pill text-white px-4 py-2 w-100" style="background-color: #e5391d;">
+    Read More <span style="margin-left: 8px;">→</span>
+  </a>
+</div>
 
-                <h3><a href="course-details.html">Website Design</a></h3>
-                <p class="description">Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
-                <div class="trainer d-flex justify-content-between align-items-center">
-                 
-                </div>
-              </div>
-            </div>
-          </div> <!-- End Course Item-->
-
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
-            <div class="course-item">
-              <img src="{{asset('Mentor/assets/img/course-2.jpg')}}" class="img-fluid" alt="...">
-              <div class="course-content">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <p class="category">Marketing</p>
-                 
-                </div>
-
-                <h3><a href="course-details.html">Search Engine Optimization</a></h3>
-                <p class="description">Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
-                <div class="trainer d-flex justify-content-between align-items-center">
-                  
-                </div>
-              </div>
-            </div>
-          </div> <!-- End Course Item-->
-
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
-            <div class="course-item">
-              <img src="{{asset('Mentor/assets/img/course-3.jpg')}}" class="img-fluid" alt="...">
-              <div class="course-content">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <p class="category">Content</p>
-                 
-                </div>
-
-                <h3><a href="course-details.html">Copywriting</a></h3>
-                <p class="description">Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
-                <div class="trainer d-flex justify-content-between align-items-center">
-                  
-                </div>
-              </div>
-            </div>
-          </div> <!-- End Course Item-->
-          <a href="{{route('program')}}" class="btn rounded-pill text-white px-4 py-2 mt-2" style="background-color: #e5391d;">
-        Read More <span style="margin-left: 8px;">→</span></a>
+  </div>
+</section> <!-- End Course Item-->
 
     </section><!-- /Courses Section -->
      <!-- Section Title -->
@@ -123,50 +87,28 @@
         
       </div><!-- End Section Title -->
     <!-- Trainers Index Section -->
-  
-      <div class="container">
-
-        <div class="row">
-
-          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
-            <div class="member">
-              <img src="{{asset('Mentor/assets/img/trainers/trainer-1.jpg')}}" class="img-fluid" alt="">
-              <div class="member-content">
-                <h4>Walter White</h4>
-                <span>Web Development</span>
-               
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-
-          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
-            <div class="member">
-              <img src="{{asset('Mentor/assets/img/trainers/trainer-2.jpg')}}" class="img-fluid" alt="">
-              <div class="member-content">
-                <h4>Sarah Jhinson</h4>
-                <span>Marketing</span>
-                
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-
-          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
-            <div class="member">
-              <img src="{{asset('Mentor/assets/img/trainers/trainer-3.jpg')}}" class="img-fluid" alt="">
-              <div class="member-content">
-                <h4>William Anderson</h4>
-                <span>Content</span>
-                
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-          <a href="{{route('pengurus')}}" class="btn rounded-pill text-white px-4 py-2 mt-2" style="background-color: #e5391d;">
-  Read More <span style="margin-left: 8px;">→</span></a>
+     <div class="container">
+    <div class="row">
+      @foreach($pengurus as $item)
+      <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+        <div class="member">
+          <img src="{{ asset('storage/foto/' . $item->foto_url) }}" class="img-fluid" alt="">
+          <div class="member-content">
+            <h4>{{ $item->full_name }}</h4>
+            <span>{{ $item->jabatan }}</span>
+          </div>
         </div>
-
       </div>
+      @endforeach
+    </div>
 
-    </section><!-- /Trainers Index Section -->
+    <div class="text-center mt-4">
+  <a href="{{ route('pengurus') }}" class="btn rounded-pill text-white px-4 py-2 w-100" style="background-color: #e5391d;">
+    Read More <span style="margin-left: 8px;">→</span>
+  </a>
+</div>
+  </div>
+</section>
 
   </main>
 @endsection

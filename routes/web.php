@@ -84,3 +84,12 @@ Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, '
 Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
 Route::get('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
 
+Route::get('/admin/pendaftar/export', [PendaftarController::class, 'export'])->name('pendaftar.export');
+
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/login');
+})->name('logout');
+

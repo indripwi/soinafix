@@ -42,7 +42,7 @@
         button {
             margin-top: 10px;
             padding: 10px;
-            background-color: #ff4d00;
+            background-color: #cb2e3b;
             color: white;
             border: none;
             font-size: 16px;
@@ -103,7 +103,8 @@
 
         <div id="signUpForm" class="hidden">
             <h2>Sign Up</h2>
-            <form>
+            <form action="{{ route('login.process') }}" method="POST" enctype="multipart/form-data">
+                 @csrf
                 <input type="text" placeholder="Nama Lengkap" required>
                 <input type="email" placeholder="Email" required>
                 <input type="password" placeholder="Password" required>

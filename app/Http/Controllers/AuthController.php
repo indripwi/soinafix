@@ -15,7 +15,7 @@ class AuthController extends Controller
     {
         return view('Admin.login');
     }
-
+    
     public function process(Request $request)
     {
         $request->validate([
@@ -31,12 +31,13 @@ class AuthController extends Controller
                 return redirect('admin/dashboard');
             }
             if (Auth::user()->role_id == 2) {
-                return redirect('anggota/profile');
+                return redirect('pengguna/pendaftaran');
             }
         }
 
         Session::flash('status', 'Username atau Password Salah');
         Session::flash('message', 'Username atau password tidak sesuai, atau akun Anda masih belum aktif.');
         return redirect('/login');
+        
     }
 }

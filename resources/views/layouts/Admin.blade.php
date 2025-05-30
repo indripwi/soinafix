@@ -44,11 +44,12 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header d-flex align-items-center" data-background-color="dark">
-                   <a href="{{ route('dashbord') }}" class="logo d-flex align-items-center">
-    <img src="{{ asset('admin/img/soina.png') }}" alt="navbar brand"
-        class="navbar-brand mt-3" height="70" />
-    <span class="ms-3 text-white fw-bold d-inline-block mt-2" style="font-size: 12px; line-height: 2;">Special Olympics Indonesia</span>
-</a>
+                    <a href="{{ route('dashbord') }}" class="logo d-flex align-items-center">
+                        <img src="{{ asset('admin/img/soina.png') }}" alt="navbar brand" class="navbar-brand mt-3"
+                            height="70" />
+                        <span class="ms-3 text-white fw-bold d-inline-block mt-2"
+                            style="font-size: 12px; line-height: 2;">Special Olympics Indonesia</span>
+                    </a>
 
                     <div class="nav-toggle ms-auto">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -116,6 +117,15 @@
                                 <p>Profil</p>
                             </a>
                         </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="button" class="nav-link btn btn-link text-start" onclick="confirmLogout()">
+                                <i class="fas fa-sign-out-alt"></i> Log Out
+                            </button>
+                        </form>
+
+
+
 
 
 
@@ -174,7 +184,7 @@
                     <div class="container-fluid">
                         <nav
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-                           
+
                         </nav>
 
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
@@ -191,7 +201,7 @@
                                     </form>
                                 </ul>
                             </li>
-                           
+
                             <li class="nav-item topbar-icon dropdown hidden-caret">
                                 <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -275,7 +285,8 @@
                                         <li>
                                             <div class="user-box">
                                                 <div class="avatar-lg">
-                                                    <img src="{{ asset('admin/img/logo-botak.jpg') }}" alt="image profile" class="avatar-img rounded" />
+                                                    <img src="{{ asset('admin/img/logo-botak.jpg') }}"
+                                                        alt="image profile" class="avatar-img rounded" />
                                                 </div>
                                                 <div class="u-text">
                                                     <h4>HiAdmin</h4>
@@ -340,6 +351,15 @@
 
             <!-- Kaiadmin JS -->
             <script src="{{ asset('admin/js/kaiadmin.min.js') }}"></script>
+
+            <script>
+                function confirmLogout() {
+                    if (confirm("Apakah Anda yakin ingin keluar?")) {
+                        document.getElementById('logout-form').submit();
+                    }
+                }
+            </script>
+
 </body>
 
 </html>

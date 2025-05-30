@@ -6,14 +6,46 @@ use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class PendaftarController extends Controller
 {
-    public function index()
-    {
-       $pendaftars = Pendaftaran::all();
-        return view('Admin.adm_pendaftar', compact('pendaftars'));
+    public function index(Request $request)
+{
+    $query = Pendaftaran::query();
+
+    // Fitur pencarian
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('nama_pendaftar', 'like', '%' . $request->search . '%')
+              ->orWhere('nik', 'like', '%' . $request->search . '%')
+              ->orWhere('nomor_telepon', 'like', '%' . $request->search . '%');
+        });
     }
+
+    // Fitur filter tahun
+    if ($request->filled('tahun')) {
+        $query->whereYear('created_at', $request->tahun);
+    }
+
+    $pendaftars = $query->latest()->get();
+
+    // Daftar tahun unik dari data
+    $tahunList = Pendaftaran::selectRaw('YEAR(created_at) as tahun')
+        ->distinct()
+        ->orderBy('tahun', 'desc')
+        ->pluck('tahun');
+
+    // Ganti ke view admin, bukan pengguna
+    return view('Admin.adm_pendaftar', compact('pendaftars', 'tahunList'));
+}
+public function export()
+{
+    $pendaftars = Pendaftaran::all();
+    $pdf = Pdf::loadView('Admin.export_pendaftar_pdf', compact('pendaftars'));
+    return $pdf->download('data_pendaftar.pdf');
+}
 
     public function store(Request $request)
     {
@@ -51,7 +83,7 @@ class PendaftarController extends Controller
     public function edit($slug)
     {
         $pendaftar = Pendaftaran::where('slug', $slug)->firstOrFail();
-        return view('Admin.pendaftaranEdit', compact('pendaftar'));
+        return view('Admin.pendaftarEdit', compact('pendaftar'));
     }
 
     public function update(Request $request, $slug)

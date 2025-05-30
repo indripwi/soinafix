@@ -32,13 +32,15 @@
                 <div class="row">
 
                     @foreach ($program as $item)
-                        <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="col-lg-2 col-md-5 mb-4 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
                             <div class="course-item">
-                                <img class="img-fluid"
-                                    src="{{ $item->gambar_url != null ? asset('storage/foto/' . $item->gambar_url) : asset('img/foto-tidak-ada.png') }}"
-                                    alt="Card image cap" />
+                                <img src="{{ $item->gambar_url != null ? asset('storage/foto/' . $item->gambar_url) : asset('img/foto-tidak-ada.png') }}"
+                                    class="img-fluid" alt="Card image cap" />
+                                <hr class="my-4">
                                 <div class="course-content">
-                                    <h3>{{ $item->sport_name}}</h3>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p style="text-align: center;"><h3>{{ $item->sport_name}}</h3></p>
+                                    </div>
                                     <p class="description">{{ $item->deskripsi}}</p>
                                 </div>
                             </div>

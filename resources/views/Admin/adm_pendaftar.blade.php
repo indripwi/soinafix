@@ -20,6 +20,42 @@
                     </li>
                 </ul>
             </div>
+            <form action="{{ route('pendaftar.index') }}" method="GET" class="mb-3">
+    <div class="row">
+        <!-- Search bar -->
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control" placeholder="Cari nama/NIK/telepon..."
+                value="{{ request('search') }}">
+        </div>
+
+        <!-- Filter tahun -->
+        <div class="col-md-3">
+            <select name="tahun" class="form-control">
+                <option value="">-- Filter Tahun --</option>
+                @foreach ($tahunList as $tahun)
+                    <option value="{{ $tahun }}" {{ request('tahun') == $tahun ? 'selected' : '' }}>
+                        {{ $tahun }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Tombol -->
+       <div class="col-md-5 d-flex gap-2">
+    <!-- Tombol Reset -->
+    <a href="{{ route('pendaftar.index') }}" class="btn btn-secondary">
+        <i class="fas fa-sync-alt me-1"></i> Reset
+    </a>
+
+    <!-- Tombol Export PDF -->
+    <a href="{{ route('pendaftar.export', ['search' => request('search'), 'tahun' => request('tahun')]) }}" class="btn btn-primary">
+        <i class="fas fa-file-pdf me-1"></i> Export PDF
+    </a>
+</div>
+
+    </div>
+</form>
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Data Pendaftar</div>
