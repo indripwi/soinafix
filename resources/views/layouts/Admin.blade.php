@@ -69,54 +69,56 @@
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
-                        <li class="nav-item active">
-
+                        <li class="nav-item {{ request()->routeIs('dashbord') ? 'active' : '' }}">
                             <a href="{{ route('dashbord') }}">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
 
-                        <!-- Upload File (sebagai item terpisah) -->
-                        <!-- Upload Program -->
-                        <li class="nav-item">
+                        <li class="nav-item {{ request()->routeIs('olahraga.index') ? 'active' : '' }}">
                             <a href="{{ route('olahraga.index') }}">
                                 <i class="fas fa-upload"></i>
                                 <p>Upload Program</p>
                             </a>
                         </li>
-                        <!-- Upload Prestasi -->
-                        <li class="nav-item">
+
+                        <li class="nav-item {{ request()->routeIs('prestasi.index') ? 'active' : '' }}">
                             <a href="{{ route('prestasi.index') }}">
                                 <i class="fas fa-trophy"></i>
                                 <p>Upload Prestasi</p>
                             </a>
                         </li>
-                        <!-- Upload Pengumuman-->
-                        <li class="nav-item">
+
+                        <li class="nav-item {{ request()->routeIs('pengumuman.index') ? 'active' : '' }}">
                             <a href="{{ route('pengumuman.index') }}">
                                 <i class="fas fa-bullhorn"></i>
                                 <p>Upload Pengumuman</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+
+                        <li class="nav-item {{ request()->routeIs('pengurus.index') ? 'active' : '' }}">
                             <a href="{{ route('pengurus.index') }}">
                                 <i class="fas fa-users"></i>
                                 <p>Upload Pengurus</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+
+                        <li class="nav-item {{ request()->routeIs('pendaftar.index') ? 'active' : '' }}">
                             <a href="{{ route('pendaftar.index') }}">
                                 <i class="fas fa-users"></i>
                                 <p>Pendaftar</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+
+                        <li class="nav-item {{ request()->routeIs('user.index') ? 'active' : '' }}">
                             <a href="{{ route('user.index') }}">
                                 <i class="fas fa-user"></i>
                                 <p>Profil</p>
                             </a>
                         </li>
+                        <!-- Tambahkan item lainnya juga di luar dropdown -->
+                        
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
                             <button type="button" class="nav-link btn btn-link text-start" onclick="confirmLogout()">
