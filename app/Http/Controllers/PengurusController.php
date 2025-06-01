@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Coache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class PengurusController extends Controller
@@ -23,45 +24,38 @@ class PengurusController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'full_name.required' => 'Nama lengkap wajib diisi.',
-            'full_name.string' => 'Nama lengkap harus berupa teks.',
-            'full_name.max' => 'Nama lengkap tidak boleh lebih dari 255 karakter.',
-
-            'slug.required' => 'Slug wajib diisi.',
-            'slug.string'   => 'Slug harus berupa teks.',
-            'slug.max'      => 'Slug maksimal 255 karakter.',
-            'slug.unique'   => 'Slug sudah digunakan, silakan pilih yang lain.',
-
             'jabatan.required' => 'Jabatan wajib diisi.',
-            'jabatan.string' => 'Jabatan harus berupa teks.',
-            'jabatan.max' => 'Jabatan tidak boleh lebih dari 255 karakter.',
-
-            'image.string' => 'Gambar harus berupa path atau nama file yang valid.',
-            'image.max'    => 'Nama file gambar maksimal 255 karakter.',
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Gambar harus berformat jpg, jpeg, atau png.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
-    
 
-    $newName = '';
-        if ($request->file('image')) {
+        $newName = null;
+        if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
-            $newName = $request->title . '-' . now()->timestamp . '.' . $extension;
+            $newName = Str::slug($request->full_name) . '-' . now()->timestamp . '.' . $extension;
             $request->file('image')->storeAs('foto', $newName);
         }
-        $request['foto_url'] = $newName;
 
-        $pengurus = Coache::create($request->all());
-        return redirect('admin/upload-pengurus')->withToastSuccess('Pengurus Berhasil Di Tambahkan!');
+        // Simpan data
+        Coache::create([
+            'full_name' => $request->full_name,
+            'jabatan' => $request->jabatan,
+            'foto_url' => $newName,
+            'slug' => Str::slug($request->full_name) . '-' . now()->timestamp,  // buat slug unik
+        ]);
+
+        return redirect()->route('pengurus.index')->with('success', 'Pengurus berhasil ditambahkan!');
     }
 
     public function edit($slug)
     {
         $coache = Coache::where('slug', $slug)->firstOrFail();
-
         return view('Admin.PengurusEdit', compact('coache'));
     }
 
     public function update(Request $request, $slug)
     {
-        // Cari data pengurus berdasarkan slug lama
         $coache = Coache::where('slug', $slug)->firstOrFail();
 
         // Validasi input
@@ -71,43 +65,47 @@ class PengurusController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'full_name.required' => 'Nama lengkap wajib diisi.',
-            'full_name.string' => 'Nama lengkap harus berupa teks.',
-            'full_name.max' => 'Nama lengkap tidak boleh lebih dari 255 karakter.',
-
             'jabatan.required' => 'Jabatan wajib diisi.',
-            'jabatan.string' => 'Jabatan harus berupa teks.',
-            'jabatan.max' => 'Jabatan tidak boleh lebih dari 255 karakter.',
-
-            'image.string' => 'Gambar harus berupa path atau nama file yang valid.',
-            'image.max'    => 'Nama file gambar maksimal 255 karakter.',
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Gambar harus berformat jpg, jpeg, atau png.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
 
         if ($request->hasFile('image')) {
+            // Hapus file lama jika ada
+            if ($coache->foto_url && Storage::exists('foto/' . $coache->foto_url)) {
+                Storage::delete('foto/' . $coache->foto_url);
+            }
             $extension = $request->file('image')->getClientOriginalExtension();
-            $newName = $request->full_name . '-' . now()->timestamp . '.' . $extension;
+            $newName = Str::slug($request->full_name) . '-' . now()->timestamp . '.' . $extension;
             $request->file('image')->storeAs('foto', $newName);
             $coache->foto_url = $newName;
         }
 
-        // Update data lain
-        $coache->full_name = $request->sport_name;
-        $coache->slug = $request->slug;
+        // Update data
+        $coache->full_name = $request->full_name;
+        $coache->jabatan = $request->jabatan;
+        // Update slug juga jika nama berubah
+        $coache->slug = Str::slug($request->full_name) . '-' . now()->timestamp;
         $coache->save();
 
-        return redirect('admin/upload-pengurus')->withToastSuccess('Pengurus Berhasil Diupdate!');
+        return redirect()->route('pengurus.index')->with('success', 'Pengurus berhasil diupdate!');
     }
-    public function hapus($slug)
-    {
-        $coache = Coache::where('slug', $slug)->firstOrFail();
 
-        // Hapus gambar dari storage jika ada
-        if ($coache->foto_url && Storage::exists('foto/' . $coache->foto_url)) {
-            Storage::delete('foto/' . $coache->foto_url);
-        }
+ public function hapus($slug)
+{
+    // Pakai model Coache karena itu yang digunakan di seluruh controller
+    $pengurus = Coache::where('slug', $slug)->firstOrFail();
 
-        // Hapus data dari database
-        $coache->delete();
-
-        return redirect()->route('pengurus.index')->withToastSuccess('Pengurus berhasil dihapus.');
+    // Hapus foto dari storage jika ada
+    if ($pengurus->foto_url && Storage::exists('foto/' . $pengurus->foto_url)) {
+        Storage::delete('foto/' . $pengurus->foto_url);
     }
+
+    // Hapus data dari database
+    $pengurus->delete();
+
+    // Redirect dan kirim session flash message
+    return redirect()->route('pengurus.index')->with('success', 'Data pengurus berhasil dihapus!');
+}
 }

@@ -17,6 +17,7 @@ use App\Models\Pendaftaran;
 use App\Models\Pengumuman;
 use App\Models\Pengurus;
 use App\Models\Prestasi;
+use Illuminate\Support\Facades\Auth;
 
 
 /*
@@ -69,6 +70,9 @@ Route::put('/admin/upload-pengumuman-update/{slug}', [PengumumanController::clas
 Route::get('/admin/upload-pengumuman-hapus/{slug}', [PengumumanController::class, 'hapus'])->name('pengumuman.hapus');
 Route::get('/pengumuman/download/{id}', [PengumumanController::class, 'download'])->name('pengumuman.download');
 Route::get('admin/pendaftar', [PendaftarController::class, 'index'])->name('pendaftar.index');
+Route::get('/admin/pendaftar/export', [PendaftarController::class, 'export'])->name('pendaftar.export');
+Route::get('/pendaftar/download/{file}', [PendaftarController::class, 'download'])->name('pendaftar.download');
+
 
 Route::get('admin/user', [UserBiodataController::class, 'index'])->name('user.index');
 Route::post('admin/user-store', [UserBiodataController::class, 'store'])->name('user.store');
@@ -83,8 +87,7 @@ Route::post('pengguna/pendaftaran-store', [PendaftaranController::class, 'store'
 Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
 Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
 Route::get('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
-
-Route::get('/admin/pendaftar/export', [PendaftarController::class, 'export'])->name('pendaftar.export');
+Route::get('/pendaftaran/download/{file}', [PendaftaranController::class, 'download'])->name('pendaftaran.download');
 
 Route::post('/logout', function () {
     Auth::logout();

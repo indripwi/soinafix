@@ -12,40 +12,40 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class PendaftarController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Pendaftaran::query();
+    {
+        $query = Pendaftaran::query();
 
-    // Fitur pencarian
-    if ($request->filled('search')) {
-        $query->where(function ($q) use ($request) {
-            $q->where('nama_pendaftar', 'like', '%' . $request->search . '%')
-              ->orWhere('nik', 'like', '%' . $request->search . '%')
-              ->orWhere('nomor_telepon', 'like', '%' . $request->search . '%');
-        });
+        // Fitur pencarian
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama_pendaftar', 'like', '%' . $request->search . '%')
+                    ->orWhere('nik', 'like', '%' . $request->search . '%')
+                    ->orWhere('nomor_telepon', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Fitur filter tahun
+        if ($request->filled('tahun')) {
+            $query->whereYear('created_at', $request->tahun);
+        }
+
+        $pendaftars = $query->latest()->get();
+
+        // Daftar tahun unik dari data
+        $tahunList = Pendaftaran::selectRaw('YEAR(created_at) as tahun')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        // Ganti ke view admin, bukan pengguna
+        return view('Admin.adm_pendaftar', compact('pendaftars', 'tahunList'));
     }
-
-    // Fitur filter tahun
-    if ($request->filled('tahun')) {
-        $query->whereYear('created_at', $request->tahun);
+    public function export()
+    {
+        $pendaftars = Pendaftaran::all();
+        $pdf = Pdf::loadView('Admin.export_pendaftar_pdf', compact('pendaftars'));
+        return $pdf->download('data_pendaftar.pdf');
     }
-
-    $pendaftars = $query->latest()->get();
-
-    // Daftar tahun unik dari data
-    $tahunList = Pendaftaran::selectRaw('YEAR(created_at) as tahun')
-        ->distinct()
-        ->orderBy('tahun', 'desc')
-        ->pluck('tahun');
-
-    // Ganti ke view admin, bukan pengguna
-    return view('Admin.adm_pendaftar', compact('pendaftars', 'tahunList'));
-}
-public function export()
-{
-    $pendaftars = Pendaftaran::all();
-    $pdf = Pdf::loadView('Admin.export_pendaftar_pdf', compact('pendaftars'));
-    return $pdf->download('data_pendaftar.pdf');
-}
 
     public function store(Request $request)
     {
@@ -69,11 +69,11 @@ public function export()
         $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
         $data['slug'] = Str::slug($request->nama_pendaftar . '-' . now()->timestamp);
 
-        $data['file_akta'] = $request->file('file_akta')->store('berkas');
-        $data['file_kk'] = $request->file('file_kk')->store('berkas');
-        $data['file_foto'] = $request->file('file_foto')->store('berkas');
-        $data['file_raport'] = $request->file('file_raport')->store('berkas');
-        $data['file_psikolog'] = $request->file('file_psikolog')->store('berkas');
+        $data['file_akta'] = $request->file('file_akta')->store('berkas', 'public');
+        $data['file_kk'] = $request->file('file_kk')->store('berkas', 'public');
+        $data['file_foto'] = $request->file('file_foto')->store('berkas', 'public');
+        $data['file_raport'] = $request->file('file_raport')->store('berkas', 'public');
+        $data['file_psikolog'] = $request->file('file_psikolog')->store('berkas', 'public');
 
         Pendaftaran::create($data);
 
@@ -107,14 +107,13 @@ public function export()
             'file_psikolog' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
 
         foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {
             if ($request->hasFile($fileField)) {
                 if ($pendaftar->$fileField && Storage::exists($pendaftar->$fileField)) {
                     Storage::delete($pendaftar->$fileField);
                 }
-                $data[$fileField] = $request->file($fileField)->store('berkas');
+                $data[$fileField] = $request->file($fileField)->store('berkas', 'public');
             }
         }
 
@@ -136,5 +135,16 @@ public function export()
         $pendaftar->delete();
 
         return redirect()->route('pendaftaran.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
+    }
+
+    public function download($file)
+    {
+        $filePath = storage_path('app/public/' . $file);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        return response()->download($filePath);
     }
 }

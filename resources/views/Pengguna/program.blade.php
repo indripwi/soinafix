@@ -41,7 +41,7 @@
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <p style="text-align: center;"><h3>{{ $item->sport_name}}</h3></p>
                                     </div>
-                                    <p class="description">{{ $item->deskripsi}}</p>
+                                    
                                 </div>
                             </div>
                         </div> <!-- End Course Item-->

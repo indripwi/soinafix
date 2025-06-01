@@ -24,27 +24,23 @@ class OlahragaController extends Controller
             'sport_name.required' => 'Nama cabang olahraga wajib diisi.',
             'sport_name.string'   => 'Nama cabang olahraga harus berupa teks.',
             'sport_name.max'      => 'Nama cabang olahraga maksimal 255 karakter.',
-
-            'slug.required' => 'Slug wajib diisi.',
-            'slug.string'   => 'Slug harus berupa teks.',
-            'slug.max'      => 'Slug maksimal 255 karakter.',
-            'slug.unique'   => 'Slug sudah digunakan, silakan pilih yang lain.',
-
-            'image.string' => 'Gambar harus berupa path atau nama file yang valid.',
-            'image.max'    => 'Nama file gambar maksimal 255 karakter.',
         ]);
-
 
         $newName = '';
         if ($request->file('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
-            $newName = $request->title . '-' . now()->timestamp . '.' . $extension;
+            $newName = $request->sport_name . '-' . now()->timestamp . '.' . $extension;
             $request->file('image')->storeAs('foto', $newName);
         }
-        $request['gambar_url'] = $newName;
 
-        $perogram = Program::create($request->all());
-        return redirect('admin/upload-program')->withToastSuccess('Program Berhasil Di Tambahkan!');
+        // Masukkan nama file ke atribut gambar_url
+        $validated['gambar_url'] = $newName;
+
+        // Simpan data ke database
+        Program::create($validated);
+
+        // Redirect dengan session success untuk Toastr
+        return redirect('admin/upload-program')->with('success', 'Program berhasil ditambahkan!');
     }
 
     public function edit($slug)
@@ -67,7 +63,6 @@ class OlahragaController extends Controller
             'sport_name.required' => 'Nama cabang olahraga wajib diisi.',
             'sport_name.string'   => 'Nama cabang olahraga harus berupa teks.',
             'sport_name.max'      => 'Nama cabang olahraga maksimal 255 karakter.',
-
             'image.image'  => 'File harus berupa gambar.',
             'image.mimes'  => 'Gambar harus berekstensi jpg, jpeg, atau png.',
             'image.max'    => 'Ukuran gambar maksimal 2MB.',
@@ -82,11 +77,12 @@ class OlahragaController extends Controller
 
         // Update data lain
         $program->sport_name = $request->sport_name;
-        $program->slug = $request->slug;
+        $program->slug = $request->slug ?? $program->slug; // Kalau slug bisa diupdate
         $program->save();
 
-        return redirect('admin/upload-program')->withToastSuccess('Program Berhasil Diupdate!');
+        return redirect('admin/upload-program')->with('success', 'Program berhasil diupdate!');
     }
+
     public function hapus($slug)
     {
         $program = Program::where('slug', $slug)->firstOrFail();
@@ -99,6 +95,6 @@ class OlahragaController extends Controller
         // Hapus data dari database
         $program->delete();
 
-        return redirect()->route('olahraga.index')->withToastSuccess('Program berhasil dihapus.');
+        return redirect()->route('olahraga.index')->with('success', 'Program berhasil dihapus.');
     }
 }

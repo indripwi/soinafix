@@ -37,11 +37,12 @@ class PendaftaranController extends Controller
         $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
         $data['slug'] = Str::slug($request->nama_pendaftar . '-' . now()->timestamp);
 
-        $data['file_akta'] = $request->file('file_akta')->store('berkas');
-        $data['file_kk'] = $request->file('file_kk')->store('berkas');
-        $data['file_foto'] = $request->file('file_foto')->store('berkas');
-        $data['file_raport'] = $request->file('file_raport')->store('berkas');
-        $data['file_psikolog'] = $request->file('file_psikolog')->store('berkas');
+        $data['file_akta'] = $request->file('file_akta')->store('berkas', 'public');
+        $data['file_kk'] = $request->file('file_kk')->store('berkas', 'public');
+        $data['file_foto'] = $request->file('file_foto')->store('berkas', 'public');
+        $data['file_raport'] = $request->file('file_raport')->store('berkas', 'public');
+        $data['file_psikolog'] = $request->file('file_psikolog')->store('berkas', 'public');
+
 
         Pendaftaran::create($data);
 
@@ -75,14 +76,13 @@ class PendaftaranController extends Controller
             'file_psikolog' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
 
         foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {
             if ($request->hasFile($fileField)) {
                 if ($pendaftaran->$fileField && Storage::exists($pendaftaran->$fileField)) {
                     Storage::delete($pendaftaran->$fileField);
                 }
-                $data[$fileField] = $request->file($fileField)->store('berkas');
+                $data[$fileField] = $request->file($fileField)->store('berkas', 'public');
             }
         }
 
@@ -104,5 +104,16 @@ class PendaftaranController extends Controller
         $pendaftaran->delete();
 
         return redirect()->route('pendaftaran.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
+    }
+
+    public function download($file)
+    {
+        $filePath = storage_path('app/public/' . $file);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        return response()->download($filePath);
     }
 }
