@@ -24,8 +24,16 @@
         </div>
 
         <div class="card-body">
+            <form action="{{ route('pengurus.index') }}" method="GET" class="mb-3 d-flex">
+                <input type="text" name="search" class="form-control me-2" placeholder="Cari nama pengurus, jabatan..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </form>
+            <a href="{{ route('pengurus.index') }}" class="btn btn-secondary">
+                <i class="fas fa-sync-alt me-1"></i> Reset
+            </a>
             <h3> Tabel Upload Pengurus </h3>
             <table class="table table-striped mt-3">
+
                 <thead>
                     <tr>
                         <th>No</th>
@@ -60,6 +68,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center mt-3">
+                    {{ $coaches->links() }}
+                </div>
         </div>
     </div>
 </div>

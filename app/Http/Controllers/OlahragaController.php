@@ -8,11 +8,20 @@ use Illuminate\Support\Facades\Storage;
 
 class OlahragaController extends Controller
 {
-    public function index()
-    {
-        $programs = Program::all();
-        return view('Admin.adm_program', compact('programs'));
+  public function index(Request $request)
+{
+    $query = Program::query();
+
+    if ($request->has('search')) {
+        $query->where('sport_name', 'like', '%' . $request->search . '%');
     }
+
+    $programs = $query->paginate(10)->appends($request->query());
+
+    return view('Admin.adm_program', compact('programs'));
+}
+
+
 
     public function store(Request $request)
     {

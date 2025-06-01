@@ -9,11 +9,22 @@ use Illuminate\Support\Facades\Storage;
 
 class PengurusController extends Controller
 {
-    public function index()
-    {
-        $coaches = Coache::all();
-        return view('Admin.adm_pengurus', compact('coaches'));
+   public function index(Request $request)
+{
+    $query = Coache::query();
+
+    if ($request->has('search')) {
+        $search = $request->search;
+        $query->where('full_name', 'like', '%' . $search . '%')
+              ->orWhere('jabatan', 'like', '%' . $search . '%');
     }
+
+    // Tampilkan 10 data per halaman dan bawa parameter pencarian saat pagination
+    $coaches = $query->orderBy('created_at', 'desc')->paginate(10)->appends($request->query());
+
+    return view('Admin.adm_pengurus', compact('coaches'));
+}
+
 
     public function store(Request $request)
     {

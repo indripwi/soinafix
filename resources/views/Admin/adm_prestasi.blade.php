@@ -35,10 +35,18 @@
 
         </div>
         <div class="card-body">
+            <form action="{{ route('prestasi.index') }}" method="GET" class="mb-3 d-flex">
+                <input type="text" name="search" class="form-control me-2" placeholder="Cari nama atlet..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </form>
+            <a href="{{ route('prestasi.index') }}" class="btn btn-secondary">
+                <i class="fas fa-sync-alt me-1"></i> Reset
+            </a>
             <div class="card-sub">
                 <h3> Table Upload Prestasi </h3>
             </div>
             <table class="table table-striped mt-3">
+              
                 <thead>
                     <tr>
                         <th scope="col">No</th>
@@ -72,13 +80,17 @@
                         </td>
 
                     </tr>
-                     @empty
+                    @empty
                     <tr>
                         <td colspan="5" class="text-center">Belum ada data prestasi yang diinput.</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
+              <div class="d-flex justify-content-center">
+                    {{ $prestasis->links() }}
+                </div>
+
         </div>
     </div>
 </div>
@@ -125,11 +137,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const deleteButtons = document.querySelectorAll('.btn-delete');
 
         deleteButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const url = this.getAttribute('data-url');
 
                 Swal.fire({
@@ -155,7 +167,8 @@
     Swal.fire({
         icon: 'success',
         title: 'Berhasil',
-        text: '{{ session('success') }}',
+        text: '{{ session('
+        success ') }}',
         showConfirmButton: false,
         timer: 2000
     });

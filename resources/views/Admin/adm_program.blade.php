@@ -23,7 +23,8 @@
         {{-- Toastr success --}}
         @if (session()->has('success'))
         <script>
-            toastr.success('{{ session('success') }}');
+            toastr.success('{{ session('
+                success ') }}');
         </script>
         @endif
 
@@ -34,20 +35,29 @@
         </div>
 
         <div class="card-body">
+            <form action="{{ route('olahraga.index') }}" method="GET" class="mb-3 d-flex">
+                <input type="text" name="search" class="form-control me-2" placeholder="Cari nama program..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </form>
+           <a href="{{ route('olahraga.index') }}" class="btn btn-secondary">
+        <i class="fas fa-sync-alt me-1"></i> Reset
+    </a>
             <div class="card-sub">
                 <h3>Table Upload Program</h3>
             </div>
             <table class="table table-striped mt-3">
+                
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
                         <th>Gambar</th>
-                        
+                        <th>Deskripsi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
+
                     @forelse ($programs as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
@@ -57,7 +67,7 @@
                                 src="{{ $item->gambar_url ? asset('storage/foto/' . $item->gambar_url) : asset('img/foto-tidak-ada.png') }}"
                                 alt="Card image cap" style="width: 100px; height: auto;" />
                         </td>
-                        
+                        <td>{{ $item->deskripsi }}</td>
                         <td>
                             <a class="btn btn-success btn-sm" href="{{ route('olahraga.edit', $item->slug) }}">
                                 Edit
@@ -74,6 +84,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center mt-3">
+                        {{ $programs->links() }}
+                    </div>
         </div>
     </div>
 </div>
@@ -97,7 +110,10 @@
                         <label for="gambar_url">Gambar</label>
                         <input type="file" name="image" id="gambar_url" class="form-control-file" required>
                     </div>
-                    
+                    <div class="form-group">
+                        <label for="deskripsi">Deskripsi</label>
+                        <input type="text" name="deskripsi" id="deskripsi" class="form-control" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -112,11 +128,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const deleteButtons = document.querySelectorAll('.btn-delete');
 
         deleteButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const url = this.getAttribute('data-url');
 
                 Swal.fire({
@@ -142,7 +158,8 @@
     Swal.fire({
         icon: 'success',
         title: 'Berhasil',
-        text: '{{ session('success') }}',
+        text: '{{ session('
+        success ') }}',
         showConfirmButton: false,
         timer: 2000
     });

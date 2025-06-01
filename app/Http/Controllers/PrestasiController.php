@@ -9,11 +9,22 @@ use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $prestasis = Prestasi::all();
-        return view('Admin.adm_prestasi', compact('prestasis'));
+        $search = $request->input('search');
+
+        $prestasis = Prestasi::when($search, function ($query, $search) {
+            return $query->where('nama_atlet', 'like', "%{$search}%")
+                ->orWhere('cabang_olahraga', 'like', "%{$search}%")
+                ->orWhere('deskripsi', 'like', "%{$search}%");
+        })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->appends(['search' => $search]); // supaya query tetap ada saat pindah halaman
+
+        return view('Admin.adm_prestasi', compact('prestasis', 'search'));
     }
+
 
     public function store(Request $request)
     {
