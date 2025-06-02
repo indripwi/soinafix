@@ -27,11 +27,12 @@ class PendaftaranController extends Controller
             'alamat' => 'required|string',
             'sekolah' => 'required|string|max:255',
             'kelas' => 'required|string|max:100',
-            'file_akta' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'file_kk' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'file_foto' => 'required|file|mimes:jpg,jpeg,png|max:2048',
-            'file_raport' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'file_psikolog' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'file_akta' => 'required|file|mimes:pdf,jpg,jpeg,png|max:4096',
+            'file_kk' => 'required|file|mimes:pdf,jpg,jpeg,png|max:4096',
+            'file_foto' => 'required|file|mimes:jpg,jpeg,png|max:4096',
+            'file_raport' => 'required|file|mimes:pdf,jpg,jpeg,png|max:4096',
+            'file_psikolog' => 'required|file|mimes:pdf,jpg,jpeg,png|max:4096',
+
         ]);
 
         $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
@@ -52,7 +53,7 @@ class PendaftaranController extends Controller
     public function edit($slug)
     {
         $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
-        return view('Pengguna.pendaftaranEdit', compact('pendaftaran'));
+        return view('Pengguna.pendaftaran_edit', compact('pendaftaran'));
     }
 
     public function update(Request $request, $slug)
@@ -76,6 +77,8 @@ class PendaftaranController extends Controller
             'file_psikolog' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
+        // ✅ Tambahkan ini
+        $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
 
         foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {
             if ($request->hasFile($fileField)) {

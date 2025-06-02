@@ -147,4 +147,17 @@ class PendaftarController extends Controller
 
         return response()->download($filePath);
     }
+  public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status_verifikasi' => 'required|in:menunggu,lolos,tidak lolos',
+    ]);
+
+    $pendaftar = Pendaftaran::findOrFail($id);
+    $pendaftar->status_verifikasi = $request->status_verifikasi;
+    $pendaftar->save();
+
+    return redirect()->back()->withToastSuccess('Status verifikasi berhasil diperbarui.');
+}
+
 }

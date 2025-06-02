@@ -14,8 +14,8 @@ class HomeController extends Controller
     public function homepage()
 {
     $programs = Program::latest()->take(4)->get();
-    $pengurus = Coache::latest()->take(3)->get();
-    return view('Pengguna.homepage', compact('programs', 'pengurus'));
+    $coaches = Coache::latest()->take(3)->get();
+    return view('Pengguna.homepage', compact('programs', 'coaches'));
 }
     public function pengumuman()
     {
@@ -39,8 +39,8 @@ class HomeController extends Controller
     }
     public function pendaftaran()
     {
-        $pendaftaran = Pendaftaran::all();
-        return view('Pengguna.pendaftaran', compact('pendaftaran'));
+        $pendaftarans = Pendaftaran::all();
+        return view('Pengguna.pendaftaran', compact('pendaftarans'));
     }
     public function tentang()
     {

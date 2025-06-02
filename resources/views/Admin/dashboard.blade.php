@@ -18,7 +18,7 @@
           </div>
           <div class="numbers">
             <p class="card-category fs-4 fw-medium">Pendaftar</p>
-            <h4 class="card-title fs-1 fw-bold">1,294</h4>
+            <h4 class="card-title fs-1 fw-bold">{{ number_format($jumlahPendaftar) }}</h4>
           </div>
         </div>
       </div>

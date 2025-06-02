@@ -31,7 +31,7 @@
                     <!-- Filter tahun -->
                     <div class="col-md-3">
                         <select name="tahun" class="form-control">
-                            <option value="">-- Filter Tahun --</option>
+                            <option value="">Pilih Tahun</option>
                             @foreach ($tahunList as $tahun)
                                 <option value="{{ $tahun }}" {{ request('tahun') == $tahun ? 'selected' : '' }}>
                                     {{ $tahun }}
@@ -84,6 +84,8 @@
                                     <th>Raport</th>
                                     <th>Psikologi</th>
                                     <th>Tanggal</th>
+                                    <!-- Tambah kolom Status Verifikasi -->
+                                    <th>Status Verifikasi</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -100,6 +102,7 @@
                                         <td>{{ $item->alamat }}</td>
                                         <td>{{ $item->sekolah }}</td>
                                         <td>{{ $item->kelas }}</td>
+
                                         @php
                                             $folderMap = [
                                                 'file_akta' => 'akta',
@@ -128,17 +131,27 @@
                                         @endforeach
 
                                         <td>{{ $item->created_at->format('d-m-Y') }}</td>
+
+                                        <!-- Kolom status verifikasi dengan dropdown -->
                                         <td>
-                                            <a href="{{ route('pendaftaran.edit', ['slug' => $item->slug]) }}"
-                                                class="btn btn-success btn-sm">Edit</a>
-                                            </a>
+                                            <form action="{{ route('pendaftar.updateStatus', $item->id) }}" method="POST">
+                                                @csrf
+                                            
+                                                <select name="status_verifikasi" onchange="this.form.submit()" class="form-select form-select-sm">
+                                                    <option value="menunggu" {{ $item->status_verifikasi == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                                    <option value="lolos" {{ $item->status_verifikasi == 'lolos' ? 'selected' : '' }}>Lolos</option>
+                                                    <option value="tidak lolos" {{ $item->status_verifikasi == 'tidak lolos' ? 'selected' : '' }}>Tidak Lolos</option>
+                                                </select>
+                                            </form>
+                                        </td>
+
+                                        <td>
                                             <form action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}"
-                                                method="POST">
+                                                method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                                             </form>
-
                                         </td>
                                     </tr>
                                 @endforeach

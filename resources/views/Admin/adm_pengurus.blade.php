@@ -68,9 +68,7 @@
                     @endforelse
                 </tbody>
             </table>
-            <div class="d-flex justify-content-center mt-3">
-                    {{ $coaches->links() }}
-                </div>
+            {{ $coaches->links('pagination::bootstrap-4') }}
         </div>
     </div>
 </div>

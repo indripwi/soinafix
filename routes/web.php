@@ -79,14 +79,15 @@ Route::post('admin/user-store', [UserBiodataController::class, 'store'])->name('
 Route::get('admin/user-edit/{slug}', [UserBiodataController::class, 'edit'])->name('user.edit');
 Route::get('admin/user-hapus/{slug}', [UserBiodataController::class, 'hapus'])->name('user.hapus');
 Route::get('admin/user-create/', [UserBiodataController::class, 'create'])->name('user.create');
+Route::post('/pendaftar/{id}/status', [PendaftarController::class, 'updateStatus'])->name('pendaftar.updateStatus');
 
 Route::resource('user', UserBiodataController::class);
 
 Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
-Route::post('pengguna/pendaftaran-store', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
+Route::post('pengguna/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
 Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
-Route::get('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
+Route::delete('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
 Route::get('/pendaftaran/download/{file}', [PendaftaranController::class, 'download'])->name('pendaftaran.download');
 
 Route::post('/logout', function () {

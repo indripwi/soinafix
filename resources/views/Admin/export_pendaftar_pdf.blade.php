@@ -69,8 +69,7 @@
                 <th>Jenis Kelamin</th>
                 <th>Tempat, Tanggal Lahir</th>
                 <th>Alamat</th>
-                <th>Sekolah</th>
-                <th>Kelas</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -83,8 +82,7 @@
                 <td>{{ $p->jenis_kelamin }}</td>
                 <td>{{ $p->tempat_lahir }}, {{ \Carbon\Carbon::parse($p->tanggal_lahir)->format('d-m-Y') }}</td>
                 <td>{{ $p->alamat }}</td>
-                <td>{{ $p->sekolah }}</td>
-                <td>{{ $p->kelas }}</td>
+                <td>{{ $p->status_verifikasi }}</td>
             </tr>
             @endforeach
         </tbody>

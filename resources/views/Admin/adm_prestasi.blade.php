@@ -87,9 +87,7 @@
                     @endforelse
                 </tbody>
             </table>
-              <div class="d-flex justify-content-center">
-                    {{ $prestasis->links() }}
-                </div>
+               {{ $prestasis->links('pagination::bootstrap-4') }}
 
         </div>
     </div>

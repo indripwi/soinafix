@@ -42,7 +42,7 @@
                 @if (session('success'))
                     <script>
                         toastr.success('{{ session('
-                                            success ') }}');
+                                                                                            success ') }}');
                     </script>
                 @endif
 
@@ -112,17 +112,17 @@
                     <h5 class="mb-3">Upload Dokumen</h5>
 
                     @foreach ([
-            'file_akta' => 'Akta Kelahiran',
-            'file_kk' => 'Kartu Keluarga',
-            'file_foto' => 'Pas Foto',
-            'file_raport' => 'Raport Terakhir',
-            'file_psikolog' => 'Tes Psikologi',
-        ] as $name => $label)
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ $name }}" class="form-label">{{ $label }}</label>
-                            <input class="form-control" type="file" id="{{ $name }}" name="{{ $name }}"
+                        'file_akta' => 'Akta Kelahiran',
+                        'file_kk' => 'Kartu Keluarga',
+                        'file_foto' => 'Pas Foto',
+                        'file_raport' => 'Raport Terakhir',
+                        'file_psikolog' => 'Tes Psikologi',
+                    ] as $name => $label)
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ $name }}" class="form-label">{{ $label }}</label>
+                        <input class="form-control" type="file" id="{{ $name }}" name="{{ $name }}"
                                 required>
-                        </div>
+                    </div>
                     @endforeach
 
                     <div class="col-12 text-center mt-4">
@@ -157,7 +157,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($pendaftaran as $index => $item)
+                                @foreach ($pendaftarans as $index => $item)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $item->nama_pendaftar }}</td>
@@ -208,6 +208,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                                                 </form>
+
                                             </div>
                                         </td>
                                 @endforeach
