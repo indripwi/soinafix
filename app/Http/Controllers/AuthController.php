@@ -15,7 +15,8 @@ class AuthController extends Controller
     {
         return view('Admin.login');
     }
-    
+
+
     public function process(Request $request)
     {
         $request->validate([
@@ -38,6 +39,23 @@ class AuthController extends Controller
         Session::flash('status', 'Username atau Password Salah');
         Session::flash('message', 'Username atau password tidak sesuai, atau akun Anda masih belum aktif.');
         return redirect('/login');
-        
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'email', 'max:100', 'unique:users'],
+            'password' => ['required', 'string', 'min:6'],
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => 2, // default pengguna biasa
+        ]);
+
+        return redirect('/register')->with('status', 'Akun berhasil dibuat. Silakan login.');
     }
 }

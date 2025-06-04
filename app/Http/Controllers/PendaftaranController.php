@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 
 class PendaftaranController extends Controller
 {
@@ -109,14 +110,15 @@ class PendaftaranController extends Controller
         return redirect()->route('pendaftaran.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
     }
 
-    public function download($file)
+        public function download(Request $request)
     {
-        $filePath = storage_path('app/public/' . $file);
+        $file = $request->query('file');
 
-        if (!file_exists($filePath)) {
-            abort(404, 'File tidak ditemukan');
+        if (!$file || !Storage::disk('public')->exists($file)) {
+            abort(404, 'File tidak ditemukan.');
         }
 
-        return response()->download($filePath);
+        return Storage::disk('public')->download($file);
     }
+
 }

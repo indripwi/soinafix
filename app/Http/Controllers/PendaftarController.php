@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 
 class PendaftarController extends Controller
@@ -134,30 +135,35 @@ class PendaftarController extends Controller
 
         $pendaftar->delete();
 
-        return redirect()->route('pendaftaran.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
+        return redirect()->route('pendaftar.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
     }
 
-    public function download($file)
+    public function download(Request $request)
     {
-        $filePath = storage_path('app/public/' . $file);
+        $file = $request->query('file');
 
-        if (!file_exists($filePath)) {
-            abort(404, 'File tidak ditemukan');
+        if (!$file || !Storage::disk('public')->exists($file)) {
+            abort(404, 'File tidak ditemukan.');
         }
 
-        return response()->download($filePath);
+        return Storage::disk('public')->download($file);
+        
     }
-  public function updateStatus(Request $request, $id)
-{
-    $request->validate([
-        'status_verifikasi' => 'required|in:menunggu,lolos,tidak lolos',
-    ]);
 
-    $pendaftar = Pendaftaran::findOrFail($id);
-    $pendaftar->status_verifikasi = $request->status_verifikasi;
-    $pendaftar->save();
 
-    return redirect()->back()->withToastSuccess('Status verifikasi berhasil diperbarui.');
-}
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status_verifikasi' => 'required|in:menunggu,lolos,tidak lolos',
+        ]);
 
+        $pendaftar = Pendaftaran::findOrFail($id);
+        $pendaftar->status_verifikasi = $request->input('status_verifikasi');
+        $pendaftar->save();
+
+        // Debug
+        Log::info('Status updated: ' . $pendaftar->status_verifikasi);
+
+        return redirect()->route('pendaftar.index')->withToastSuccess('Status verifikasi berhasil diperbarui.');
+    }
 }

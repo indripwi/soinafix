@@ -8,7 +8,7 @@
                 <h3 class="fw-bold mb-3">Pendaftar</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
-                        <a href="{{ route('dashbord') }}">
+                        <a href="{{ route('dashboard') }}">
                             <i class="icon-home"></i>
                         </a>
                     </li>
@@ -102,7 +102,6 @@
                                         <td>{{ $item->alamat }}</td>
                                         <td>{{ $item->sekolah }}</td>
                                         <td>{{ $item->kelas }}</td>
-
                                         @php
                                             $folderMap = [
                                                 'file_akta' => 'akta',
@@ -130,23 +129,30 @@
                                             </td>
                                         @endforeach
 
+
                                         <td>{{ $item->created_at->format('d-m-Y') }}</td>
 
                                         <!-- Kolom status verifikasi dengan dropdown -->
                                         <td>
                                             <form action="{{ route('pendaftar.updateStatus', $item->id) }}" method="POST">
                                                 @csrf
-                                            
-                                                <select name="status_verifikasi" onchange="this.form.submit()" class="form-select form-select-sm">
-                                                    <option value="menunggu" {{ $item->status_verifikasi == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
-                                                    <option value="lolos" {{ $item->status_verifikasi == 'lolos' ? 'selected' : '' }}>Lolos</option>
-                                                    <option value="tidak lolos" {{ $item->status_verifikasi == 'tidak lolos' ? 'selected' : '' }}>Tidak Lolos</option>
+                                                @method('POST')
+                                                <select name="status_verifikasi" onchange="this.form.submit()"
+                                                    class="form-select form-select-sm">
+                                                    <option value="menunggu"
+                                                        {{ $item->status_verifikasi === 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                                    <option value="lolos"
+                                                        {{ $item->status_verifikasi === 'lolos' ? 'selected' : '' }}>Lolos
+                                                    </option>
+                                                    <option value="tidak lolos"
+                                                        {{ $item->status_verifikasi === 'tidak lolos' ? 'selected' : '' }}>Tidak Lolos</option>
                                                 </select>
                                             </form>
+                                            <small>Status saat ini: {{ $item->status_verifikasi }}</small>
                                         </td>
 
                                         <td>
-                                            <form action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}"
+                                            <form action="{{ route('pendaftar.hapus', ['slug' => $item->slug]) }}"
                                                 method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

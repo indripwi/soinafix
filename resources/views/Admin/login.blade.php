@@ -103,7 +103,7 @@
 
         <div id="signUpForm" class="hidden">
             <h2>Sign Up</h2>
-            <form action="{{ route('login.process') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('register.process') }}" method="POST" enctype="multipart/form-data">
                  @csrf
                 <input type="text" placeholder="Nama Lengkap" required>
                 <input type="email" placeholder="Email" required>

@@ -52,7 +52,7 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header d-flex align-items-center" data-background-color="dark">
-                    <a href="{{ route('dashbord') }}" class="logo d-flex align-items-center">
+                    <a href="{{ route('dashboard') }}" class="logo d-flex align-items-center">
                         <img src="{{ asset('admin/img/soina.png') }}" alt="navbar brand" class="navbar-brand mt-3"
                             height="70" />
                         <span class="ms-3 text-white fw-bold d-inline-block mt-2"
@@ -77,8 +77,8 @@
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
-                        <li class="nav-item {{ request()->routeIs('dashbord') ? 'active' : '' }}">
-                            <a href="{{ route('dashbord') }}">
+                        <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard') }}">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                             </a>

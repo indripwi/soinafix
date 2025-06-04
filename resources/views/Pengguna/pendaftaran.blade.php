@@ -112,11 +112,11 @@
                     <h5 class="mb-3">Upload Dokumen</h5>
 
                     @foreach ([
-                        'file_akta' => 'Akta Kelahiran',
-                        'file_kk' => 'Kartu Keluarga',
-                        'file_foto' => 'Pas Foto',
-                        'file_raport' => 'Raport Terakhir',
-                        'file_psikolog' => 'Tes Psikologi',
+                        'file_akta' => 'Akta Kelahiran, pdf,jpg,jpeg,png',
+                        'file_kk' => 'Kartu Keluarga, pdf,jpg,jpeg,png',
+                        'file_foto' => 'Pas Foto, jpg,jpeg,png',
+                        'file_raport' => 'Raport Terakhir, pdf,jpg,jpeg,png',
+                        'file_psikolog' => 'Tes Psikologi, pdf,jpg,jpeg,png',
                     ] as $name => $label)
                     <div class="col-md-6 mb-3">
                         <label for="{{ $name }}" class="form-label">{{ $label }}</label>
@@ -219,6 +219,7 @@
             </div>
         </div>
     </main>
+   
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             Swal.fire({
@@ -236,9 +237,10 @@
                     window.location.href = "{{ route('login') }}";
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     // Redirect ke halaman registrasi
-                    window.location.href = "{{ route('login') }}";
+                    window.location.href = "{{ route('register') }}";
                 }
             });
         });
     </script>
+     
 @endsection
