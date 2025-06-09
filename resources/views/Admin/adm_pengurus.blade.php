@@ -31,7 +31,7 @@
             <a href="{{ route('pengurus.index') }}" class="btn btn-secondary">
                 <i class="fas fa-sync-alt me-1"></i> Reset
             </a>
-            <h3> Tabel Upload Pengurus </h3>
+            <h3> Daftar Pengurus </h3>
             <table class="table table-striped mt-3">
 
                 <thead>

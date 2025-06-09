@@ -1621,25 +1621,35 @@ body {
 --------------------------------------------------------------*/
 .trainers .member {
   position: relative;
+  text-align: center; /* optional: untuk sentris teks */
 }
 
 .trainers .member .member-img {
-  margin: 0 80px;
+  margin: 0 auto; /* sentris */
+  width: 200px; /* Ubah sesuai ukuran yang diinginkan */
+  height: 200px;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
 }
 
 @media (max-width: 1024px) {
-  .trainers .member .member-img {
-    margin: 0 60px;
-  }
+ .trainers .member .member-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
+  position: relative;
 }
 
 .trainers .member .member-img img {
-  position: relative;
-  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
+
 
 .trainers .member .member-img .social {
   position: absolute;
@@ -1649,7 +1659,6 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 2;
-  padding-bottom: 20px;
   transition: 0.3s;
   visibility: hidden;
   opacity: 0;
@@ -1658,12 +1667,8 @@ body {
 .trainers .member .member-img .social a {
   transition: 0.3s;
   color: var(--contrast-color);
-  font-size: 20px;
-  margin: 0 8px;
-}
-
-.trainers .member .member-img .social a:hover {
-  color: var(--accent-color);
+  font-size: 24px; /* lebih besar */
+  margin: 0 10px;
 }
 
 .trainers .member .member-info {
@@ -1673,26 +1678,40 @@ body {
 .trainers .member .member-info h4 {
   font-weight: 700;
   margin-bottom: 6px;
-  font-size: 18px;
+  font-size: 24px; /* lebih besar */
 }
 
 .trainers .member .member-info span {
   font-style: italic;
   display: block;
-  font-size: 15px;
+  font-size: 18px; /* lebih besar */
   color: color-mix(in srgb, var(--default-color), transparent 40%);
   margin-bottom: 10px;
 }
 
 .trainers .member .member-info p {
   margin-bottom: 0;
-  font-size: 14px;
+  font-size: 16px; /* lebih besar */
 }
 
 .trainers .member:hover .member-img .social {
-  padding-bottom: 0;
   visibility: visible;
   opacity: 1;
+}
+.section-title {
+  margin-bottom: 10px !important;
+  padding-bottom: 0 !important;
+}
+
+#trainers-index {
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+}
+
+.trainers .member .member-info {
+  margin-top: 10px;
+}
+
 }
 
 /*--------------------------------------------------------------

@@ -234,7 +234,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect ke halaman login
-                    window.location.href = "{{ route('login') }}";
+                    window.location.href = "{{ route('log_in') }}";
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     // Redirect ke halaman registrasi
                     window.location.href = "{{ route('register') }}";

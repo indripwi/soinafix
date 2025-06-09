@@ -43,7 +43,7 @@
                 <i class="fas fa-sync-alt me-1"></i> Reset
             </a>
             <div class="card-sub">
-                <h3> Table Upload Prestasi </h3>
+                <h3> Daftar Prestasi </h3>
             </div>
             <table class="table table-striped mt-3">
               

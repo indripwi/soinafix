@@ -29,7 +29,7 @@
             <div class="container">
                 <div class="row gy-5">
                     @foreach ($coache as $item)
-                        <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="100">
+                        <div class="col-lg-3 col-md-6 member" data-aos="fade-up" data-aos-delay="100">
                             <div class="member-img">
                                 <img src="{{ $item->foto_url != null ? asset('storage/foto/' . $item->foto_url) : asset('img/foto-tidak-ada.png') }}"
                                     alt="" class="zoom-hover">

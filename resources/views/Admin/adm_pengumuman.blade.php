@@ -35,7 +35,7 @@
             </div>
             <div class="card-body">
                 <div class="card-sub">
-                    <h3> Tabel Upload Pengumuman </h3>
+                    <h3> Hasil Seleksi Pengumuman </h3>
                 </div>
                 <table class="table table-striped mt-3">
                     <thead>

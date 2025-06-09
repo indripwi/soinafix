@@ -118,9 +118,9 @@
 
             <div class="text-center mt-4">
                 <a href="{{ route('pengurus') }}" class="btn rounded-pill text-white px-4 py-2 w-100"
-                    style="background-color: #e5391d;">
-                    Read More <span style="margin-left: 8px;">→</span>
-                </a>
+                        style="background-color: #e5391d;">
+                        Read More <span style="margin-left: 8px;">→</span>
+                    </a>
             </div>
             </div>
         </section>

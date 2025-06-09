@@ -277,7 +277,7 @@
                                     </li>
                                 </ul>
                             </li>
-
+                            
                             <li class="nav-item topbar-user dropdown hidden-caret">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
@@ -293,6 +293,7 @@
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
                                     <div class="dropdown-user-scroll scrollbar-outer">
                                         <li>
+                                            
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img src="{{ asset('admin/img/logo-botak.jpg') }}"
@@ -301,8 +302,8 @@
                                                 <div class="u-text">
                                                     <h4>HiAdmin</h4>
                                                     <p class="text-muted">admin@example.com</p>
-                                                    <a href="profile.html"
-                                                        class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                                    <a href="{{ route('user.index') }}" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                                        
                                                 </div>
                                             </div>
                                         </li>
