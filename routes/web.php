@@ -13,7 +13,6 @@ use App\Http\Controllers\PendaftarController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\UserBiodataController;
 use App\Http\Controllers\Auth\GoogleController;
-use App\Http\Controllers\UserAuthController;
 use App\Models\Pendaftaran;
 use App\Models\Pengumuman;
 use App\Models\Pengurus;
@@ -45,18 +44,12 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login-masuk', [AuthController::class, 'process'])->name('login.process');
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'processRegister'])->name('register.process');
+Route::post('/register', [AuthController::class, 'register'])->name('register.process');
+
 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
-Route::get('/log_in', [UserAuthController::class, 'showLoginForm'])->name('log_in');
-Route::post('/log_in', [UserAuthController::class, 'login']);
-
-Route::get('/register', [UserAuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [UserAuthController::class, 'register']);
-
-Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 
 Route::get('admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 Route::get('admin/upload-program', [OlahragaController::class, 'index'])->name('olahraga.index');
@@ -95,6 +88,7 @@ Route::post('/pendaftar/{id}/status', [PendaftarController::class, 'updateStatus
 
 Route::resource('user', UserBiodataController::class);
 
+
 Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
 Route::post('pengguna/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
@@ -109,8 +103,6 @@ Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
 
-Route::get('/pendaftaran', function () {
-    return view('pendaftaran');
-})->middleware('auth');
+
 
 

@@ -78,7 +78,7 @@ class PendaftaranController extends Controller
             'file_psikolog' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        // ✅ Tambahkan ini
+      
         $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
 
         foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {

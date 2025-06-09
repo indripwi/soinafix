@@ -18,28 +18,33 @@ class AuthController extends Controller
 
 
     public function process(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'password' => ['required', 'string', 'max:50'],
-        ]);
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:50'],
+        'password' => ['required', 'string', 'max:50'],
+    ]);
 
-        $credentials = $request->only('name', 'password');
+    $credentials = $request->only('name', 'password');
 
-        if (Auth::attempt($credentials)) {
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
 
-            if (Auth::user()->role_id == 1) {
-                return redirect('admin/dashboard');
-            }
-            if (Auth::user()->role_id == 2) {
-                return redirect('pengguna/pendaftaran');
-            }
+        $user = Auth::user();
+
+        if ($user->role_id == 1) {
+            return redirect()->intended('admin/dashboard');
         }
 
-        Session::flash('status', 'Username atau Password Salah');
-        Session::flash('message', 'Username atau password tidak sesuai, atau akun Anda masih belum aktif.');
-        return redirect('/login');
+        if ($user->role_id == 2) {
+            return redirect()->intended('pengguna/pendaftaran');
+        }
     }
+
+    Session::flash('status', 'Username atau Password Salah');
+    Session::flash('message', 'Username atau password tidak sesuai, atau akun Anda masih belum aktif.');
+    return redirect('/login');
+}
+
 
     public function register(Request $request)
     {
