@@ -73,7 +73,21 @@
 
 <body>
     <div class="container">
-        <div id="signInForm">
+        <div id="signUpForm">
+            <h2>Sign Up</h2>
+            <form action="{{ route('register.process') }}" method="POST" enctype="multipart/form-data">
+                 @csrf
+                <input type="text" placeholder="Nama Lengkap" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <div class="switch">
+                Sudah punya akun? <a href="#" onclick="toggleForms()">Sign In</a>
+            </div>
+        </div>
+
+        <div id="signInForm" class="hidden">
             <h2>Sign In</h2>
             <form action="{{ route('login.process') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -101,19 +115,7 @@
             </script>
         </div>
 
-        <div id="signUpForm" class="hidden">
-            <h2>Sign Up</h2>
-            <form action="{{ route('register.process') }}" method="POST" enctype="multipart/form-data">
-                 @csrf
-                <input type="text" placeholder="Nama Lengkap" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit">Sign Up</button>
-            </form>
-            <div class="switch">
-                Sudah punya akun? <a href="#" onclick="toggleForms()">Sign In</a>
-            </div>
-        </div>
+        
     </div>
 
     <script>

@@ -75,7 +75,7 @@ public function update(Request $request, $slug)
 
         $extension = $request->file('image')->getClientOriginalExtension();
         $imageName = 'img-' . now()->timestamp . '.' . $extension;
-        $request->file('image')->storeAs('foto', $imageName);
+        $request->file('image')->storeAs('public/foto', $imageName);
         $announcement->gambar_url = $imageName;
     }
 
@@ -95,5 +95,38 @@ public function update(Request $request, $slug)
 
     return redirect('admin/upload-pengumuman')->withToastSuccess('Pengumuman Berhasil Diupdate!');
 }
+
+public function download(Request $request)
+    {
+        $pdfName = $request->query('file');
+
+        if (!$pdfName || !Storage::disk('public')->exists($pdfName)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return Storage::disk('public')->download($pdfName);
+        
+    }
+
+
+public function destroy($slug)
+{
+    $announcement = Announcement::where('slug', $slug)->firstOrFail();
+
+    // Hapus gambar jika ada
+    if ($announcement->gambar_url && Storage::exists('public/foto/' . $announcement->gambar_url)) {
+        Storage::delete('public/foto/' . $announcement->gambar_url);
+    }
+
+    // Hapus PDF jika ada
+    if ($announcement->pdf_file && Storage::exists('public/announcements/' . $announcement->pdf_file)) {
+        Storage::delete('public/announcements/' . $announcement->pdf_file);
+    }
+
+    $announcement->delete();
+
+    return redirect()->back()->with('success', 'Pengumuman berhasil dihapus.');
+}
+
 }
 

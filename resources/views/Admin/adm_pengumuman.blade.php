@@ -29,8 +29,8 @@
             <div class="card-header">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    <i class="fas fa-plus-circle me-1"></i> Input Hasil Pengumuman
-</button>
+                    <i class="fas fa-plus-circle me-1"></i> Input Hasil Pengumuman
+                </button>
 
             </div>
             <div class="card-body">
@@ -54,12 +54,12 @@
                                 <td>{{ $item->title }}</td>
                                 <td>
                                     <img class="card-img-top"
-                                    src="{{ $item->gambar_url != null ? asset('storage/foto/' . $item->gambar_url) : asset('img/foto-tidak-ada.png') }}"
-                                    alt="" style="width: 100px; height: auto;" />
+                                        src="{{ $item->gambar_url != null ? asset('storage/foto/' . $item->gambar_url) : asset('img/foto-tidak-ada.png') }}"
+                                        alt="" style="width: 100px; height: auto;" />
                                 </td>
                                 <td>
-                                    @if($item->pdf_file)
-                                        <a href="{{ asset('storage/announcements/' . $item->pdf_file) }}" target="_blank">
+                                    @if ($item->pdf_file)
+                                        <a href="{{ asset('storage/announcements/' . $item->pdf_file) }}" download>
                                             <i class="fas fa-file-pdf text-danger"></i> Unduh PDF
                                         </a>
                                     @else
@@ -70,10 +70,12 @@
                                     <a class="btn btn-success btn-sm" href="{{ route('pengumuman.edit', $item->slug) }}">
                                         Edit
                                     </a>
-                                    <a class="btn btn-danger btn-sm" href="{{ route('pengumuman.hapus', $item->slug) }}" onClick="confirm('Delete entry?')"
->
-                                        hapus
-                                    </a>
+                                    <form action="{{ route('pengumuman.hapus', $item->slug) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm btn-delete">Hapus</button>
+                                    </form>
+
 
                                 </td>
 
@@ -119,4 +121,45 @@
             </div>
         </div>
     </div>
+{{-- Load SweetAlert2 --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-url');
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data program akan dihapus permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    });
+</script>
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: '{{ session('
+        success ') }}',
+        showConfirmButton: false,
+        timer: 2000
+    });
+</script>
+@endif
 @endsection

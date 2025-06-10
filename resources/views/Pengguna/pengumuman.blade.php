@@ -26,19 +26,20 @@
     </div> <!-- End Page Title -->
        
     <div class="container">
-    <h2>Daftar Pengumuman</h2>
+    @foreach($announcement as $item)
+    <h2>{{ $item->title }}</h2>
     <ul class="list-group mt-4">
-        @foreach($announcement as $item)
+        <a href="{{ route('pengumuman.download', $item->pdf_file) }}" class="btn btn-primary">
+                    Download PDF
+                </a>
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
-                    <h5>{{ $item->title }}</h5>
+                    <h5></h5>
                     <img class="img-fluid"
                         src="{{ $item->gambar_url != null ? asset('storage/foto/' . $item->gambar_url) : asset('img/foto-tidak-ada.png') }}"
                         alt="Card image cap" />
                 </div>
-                <a href="{{ route('pengumuman.download', $item->id) }}" class="btn btn-primary">
-                    Download PDF
-                </a>
+                
             </li>
         @endforeach
     </ul>

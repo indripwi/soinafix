@@ -45,8 +45,12 @@ class AuthController extends Controller
     return redirect('/login');
 }
 
+    public function register()
+    {
+        return view('Admin.register');
+    }
 
-    public function register(Request $request)
+    public function Registerprocess(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:50'],
