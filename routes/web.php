@@ -13,6 +13,7 @@ use App\Http\Controllers\PendaftarController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\UserBiodataController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Models\Pendaftaran;
 use App\Models\Pengumuman;
 use App\Models\Pengurus;
@@ -93,6 +94,7 @@ Route::post('/pendaftar/{id}/status', [PendaftarController::class, 'updateStatus
 
 Route::resource('user', UserBiodataController::class);
 
+Route::middleware(['auth'])->group(function () {
 Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'pendaftaran'])->name('pendaftaran');
 Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
 Route::post('pengguna/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
@@ -100,6 +102,12 @@ Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, '
 Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
 Route::delete('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
 Route::get('/pendaftaran/download/{file}', [PendaftaranController::class, 'download'])->name('pendaftaran.download');
+});
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/admin/setting', [SettingController::class, 'index'])->name('admin.setting.index');
+    Route::post('/admin/setting/update', [SettingController::class, 'update'])->name('admin.setting.update');
+});
 
 Route::post('/logout', function () {
     Auth::logout();
@@ -108,6 +116,10 @@ Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
 
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect()->route('homepage');
+})->name('logout');
 
 
 

@@ -6,13 +6,20 @@ use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Setting;
 
 
 class PendaftaranController extends Controller
 {
     public function index()
     {
-        $pendaftarans = Pendaftaran::all();
+        $status = Setting::getValue('pendaftaran_status', 'tutup');
+
+        if ($status !== 'buka') {
+            return view('Pengguna.pendaftaran_tutup');
+        }
+
+        $pendaftarans = Pendaftaran::where('user_id', auth()->id())->get();
         return view('Pengguna.pendaftaran', compact('pendaftarans'));
     }
 
@@ -38,6 +45,7 @@ class PendaftaranController extends Controller
 
         $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
         $data['slug'] = Str::slug($request->nama_pendaftar . '-' . now()->timestamp);
+        $data['user_id'] = auth()->id();
 
         $data['file_akta'] = $request->file('file_akta')->store('berkas', 'public');
         $data['file_kk'] = $request->file('file_kk')->store('berkas', 'public');
@@ -53,13 +61,13 @@ class PendaftaranController extends Controller
 
     public function edit($slug)
     {
-        $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
+       $pendaftaran = Pendaftaran::where('slug', $slug)->where('user_id', auth()->id())->firstOrFail();
         return view('Pengguna.pendaftaran_edit', compact('pendaftaran'));
     }
 
     public function update(Request $request, $slug)
     {
-        $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
+        $pendaftaran = Pendaftaran::where('slug', $slug)->where('user_id', auth()->id())->firstOrFail();
 
         $validated = $request->validate([
             'nama_pendaftar' => 'required|string|max:255',
@@ -78,7 +86,7 @@ class PendaftaranController extends Controller
             'file_psikolog' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-      
+
         $data = $request->except(['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog']);
 
         foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {
@@ -97,7 +105,7 @@ class PendaftaranController extends Controller
 
     public function hapus($slug)
     {
-        $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
+        $pendaftaran = Pendaftaran::where('slug', $slug)->where('user_id', auth()->id())->firstOrFail();
 
         foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $fileField) {
             if ($pendaftaran->$fileField && Storage::exists($pendaftaran->$fileField)) {
@@ -110,7 +118,7 @@ class PendaftaranController extends Controller
         return redirect()->route('pendaftaran.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
     }
 
-        public function download(Request $request)
+    public function download(Request $request)
     {
         $file = $request->query('file');
 
@@ -120,5 +128,4 @@ class PendaftaranController extends Controller
 
         return Storage::disk('public')->download($file);
     }
-
 }

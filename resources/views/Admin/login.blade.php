@@ -124,6 +124,10 @@
             signUpForm.classList.toggle("hidden");
         }
     </script>
+    <script>
+    localStorage.removeItem("guestModalShown");
+</script>
+
 </body>
 
 </html>

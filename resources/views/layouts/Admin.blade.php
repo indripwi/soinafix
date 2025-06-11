@@ -125,6 +125,12 @@
                                 <p>Profil</p>
                             </a>
                         </li>
+                        <li class="nav-item {{ request()->routeIs('admin.setting.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.setting.index') }}">
+                                <i class="fas fa-user"></i>
+                                <p>Setting</p>
+                            </a>
+                        </li>
                         <!-- Tambahkan item lainnya juga di luar dropdown -->
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">

@@ -2,6 +2,14 @@
 <html lang="en">
 
 <head>
+    @auth
+    <p>🔐 Logged in sebagai: {{ Auth::user()->name }}</p>
+@endauth
+
+@guest
+    <p>🔓 Kamu belum login (guest)</p>
+@endguest
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -16,6 +24,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <!-- Bootstrap Bundle JS (sudah termasuk Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('Mentor/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -148,6 +161,27 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('Mentor/assets/js/main.js') }}"></script>
+   @guest
+<!-- Popup dan script -->
+<div id="loginPopup" style="...">...</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!localStorage.getItem('guestPopupShown')) {
+            document.getElementById('loginPopup').style.display = 'flex';
+            localStorage.setItem('guestPopupShown', 'true');
+        }
+    });
+    function closePopup() {
+        document.getElementById('loginPopup').style.display = 'none';
+    }
+</script>
+@endguest
+
+@auth
+<script>
+    localStorage.removeItem("guestPopupShown");
+</script>
+@endauth
 </body>
 
 </html>

@@ -17,13 +17,28 @@
                 </div>
             </div>
             <nav class="breadcrumbs">
-                <div class="container">
-                    <ol>
+                <div class="container d-flex justify-content-between align-items-center">
+                    <ol class="mb-0">
                         <li><a href="{{ route('homepage') }}">Home</a></li>
                         <li class="current">Pendaftaran</li>
                     </ol>
+
+                    @auth
+                        <button id="logout-button" class="btn btn-outline-light d-flex align-items-center gap-2">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+
+                        <!-- Hidden form for actual logout -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    @endauth
+
                 </div>
             </nav>
+
+
         </div>
 
         <div class="container">
@@ -41,8 +56,10 @@
 
                 @if (session('success'))
                     <script>
-                        toastr.success('{{ session('
-                                                                                            success ') }}');
+                        toastr.success(
+                            '{{ session('
+                                                                                                                                                                                success ') }}'
+                        );
                     </script>
                 @endif
 
@@ -112,17 +129,17 @@
                     <h5 class="mb-3">Upload Dokumen</h5>
 
                     @foreach ([
-                        'file_akta' => 'Akta Kelahiran, pdf,jpg,jpeg,png',
-                        'file_kk' => 'Kartu Keluarga, pdf,jpg,jpeg,png',
-                        'file_foto' => 'Pas Foto, jpg,jpeg,png',
-                        'file_raport' => 'Raport Terakhir, pdf,jpg,jpeg,png',
-                        'file_psikolog' => 'Tes Psikologi, pdf,jpg,jpeg,png',
-                    ] as $name => $label)
-                    <div class="col-md-6 mb-3">
-                        <label for="{{ $name }}" class="form-label">{{ $label }}</label>
-                        <input class="form-control" type="file" id="{{ $name }}" name="{{ $name }}"
-                                required>
-                    </div>
+            'file_akta' => 'Akta Kelahiran, pdf,jpg,jpeg,png',
+            'file_kk' => 'Kartu Keluarga, pdf,jpg,jpeg,png',
+            'file_foto' => 'Pas Foto, jpg,jpeg,png',
+            'file_raport' => 'Raport Terakhir, pdf,jpg,jpeg,png',
+            'file_psikolog' => 'Tes Psikologi, pdf,jpg,jpeg,png',
+        ] as $name => $label)
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ $name }}" class="form-label">{{ $label }}</label>
+                            <input class="form-control" type="file" id="{{ $name }}"
+                                name="{{ $name }}" required>
+                        </div>
                     @endforeach
 
                     <div class="col-12 text-center mt-4">
@@ -219,28 +236,65 @@
             </div>
         </div>
     </main>
-   
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            Swal.fire({
-                title: 'Anda belum login',
-                text: 'Silakan login atau registrasi terlebih dahulu untuk melanjutkan pendaftaran.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Login',
-                cancelButtonText: 'Registrasi',
-                reverseButtons: true,
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect ke halaman login
-                    window.location.href = "{{ route('login') }}";
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Redirect ke halaman registrasi
-                    window.location.href = "{{ route('register') }}";
-                }
+    @guest
+        <!-- Modal tanpa tombol silang dan tidak bisa ditutup -->
+        <div class="modal fade" id="guestLoginModal" tabindex="-1" aria-labelledby="guestLoginModalLabel"
+            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow-lg">
+                    <div class="modal-header bg-warning text-dark">
+                        <h5 class="modal-title" id="guestLoginModalLabel">Anda belum login</h5>
+                        <!-- HAPUS tombol close/silang -->
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>Untuk melanjutkan pendaftaran, silakan login atau registrasi terlebih dahulu.</p>
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a href="{{ route('login') }}" class="btn btn-primary px-4">Login</a>
+                            <a href="{{ route('register') }}" class="btn btn-outline-secondary px-4">Registrasi</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tampilkan modal saat halaman dimuat -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var guestModal = new bootstrap.Modal(document.getElementById('guestLoginModal'), {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                guestModal.show();
             });
+        </script>
+    @endguest
+
+
+    <!-- SweetAlert2 CDN (jika belum ada) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+    document.getElementById("logout-button").addEventListener("click", function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Anda yakin ingin keluar?',
+            text: "Anda akan keluar dari sesi login.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, logout',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem("guestModalShown");
+                document.getElementById('logout-form').submit();
+            }
         });
-    </script>
-     
+    });
+</script>
+
+
+
 @endsection

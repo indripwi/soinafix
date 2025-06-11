@@ -75,13 +75,26 @@
     <div class="container">
         <div id="signUpForm">
             <h2>Sign Up</h2>
+            @if(session('status'))
+    <div style="color: green; text-align:center;">
+        {{ session('status') }}
+    </div>
+@endif
+
+@if(session('message'))
+    <div style="color: red; text-align:center;">
+        {{ session('message') }}
+    </div>
+@endif
             <form action="{{ route('register.process') }}" method="POST" enctype="multipart/form-data">
-                 @csrf
-                <input type="text" placeholder="Nama Lengkap" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
+                @csrf
+                <input type="text" name="name" placeholder="Nama Lengkap" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
                 <button type="submit">Sign Up</button>
             </form>
+
             <div class="switch">
                 Sudah punya akun? <a href="#" onclick="toggleForms()">Sign In</a>
             </div>
@@ -89,6 +102,17 @@
 
         <div id="signInForm" class="hidden">
             <h2>Sign In</h2>
+            @if(session('status'))
+    <div style="color: green; text-align:center;">
+        {{ session('status') }}
+    </div>
+@endif
+
+@if(session('message'))
+    <div style="color: red; text-align:center;">
+        {{ session('message') }}
+    </div>
+@endif
             <form action="{{ route('login.process') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="text" id="loginEmail" name="name" placeholder="username" required>
@@ -101,7 +125,7 @@
             </div>
             <div class="switch">
                 <a href="{{ route('google.login') }}" onclick="toggleForms()">
-                  Login dengan Google
+                    Login dengan Google
                 </a>
             </div>
 
@@ -115,7 +139,7 @@
             </script>
         </div>
 
-        
+
     </div>
 
     <script>
@@ -126,6 +150,10 @@
             signUpForm.classList.toggle("hidden");
         }
     </script>
+    <script>
+    localStorage.removeItem("guestModalShown");
+</script>
+
 </body>
 
 </html>
