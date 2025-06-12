@@ -123,11 +123,7 @@
             <div class="switch">
                 Belum punya akun? <a href="#" onclick="toggleForms()">Sign Up</a>
             </div>
-            <div class="switch">
-                <a href="{{ route('google.login') }}" onclick="toggleForms()">
-                    Login dengan Google
-                </a>
-            </div>
+            
 
             <script>
                 function toggleForms() {

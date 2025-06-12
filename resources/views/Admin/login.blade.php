@@ -86,10 +86,9 @@
                 Belum punya akun? <a href="#" onclick="toggleForms()">Sign Up</a>
             </div>
             <div class="switch">
-                <a href="{{ route('google.login') }}" onclick="toggleForms()">
-                  Login dengan Google
-                </a>
+                <a href="{{ route('password.request') }}">Lupa Password?</a>
             </div>
+
 
             <script>
                 function toggleForms() {
@@ -104,7 +103,7 @@
         <div id="signUpForm" class="hidden">
             <h2>Sign Up</h2>
             <form action="{{ route('register.process') }}" method="POST" enctype="multipart/form-data">
-                 @csrf
+                @csrf
                 <input type="text" placeholder="Nama Lengkap" required>
                 <input type="email" placeholder="Email" required>
                 <input type="password" placeholder="Password" required>
@@ -125,8 +124,8 @@
         }
     </script>
     <script>
-    localStorage.removeItem("guestModalShown");
-</script>
+        localStorage.removeItem("guestModalShown");
+    </script>
 
 </body>
 

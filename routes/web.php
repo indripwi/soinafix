@@ -39,7 +39,7 @@ Route::get('pendaftaran', [HomeController::class, 'pendaftaran'])->name('pendaft
 Route::get('prestasi', [HomeController::class, 'prestasi'])->name('prestasi');
 Route::get('program', [HomeController::class, 'program'])->name('program');
 Route::get('tentang', [HomeController::class, 'tentang'])->name('tentang');
-Route::get('riwayat', [RiwayatController::class, 'riwayat'])->name('riwayat');
+
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login-masuk', [AuthController::class, 'process'])->name('login.process');
@@ -47,10 +47,18 @@ Route::post('/login-masuk', [AuthController::class, 'process'])->name('login.pro
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register-masuk', [AuthController::class, 'Registerprocess'])->name('register.process');
 
+Route::get('/forgot-password', [AuthController::class, 'forgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.send-code');
+Route::get('/reset-password/{token}', [AuthController::class, 'resetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+Route::get('/verify-code', [AuthController::class, 'verifyForm'])->name('password.verify-form');
+Route::post('/verify-code', [AuthController::class, 'verifyCode'])->name('password.verify-code');
 
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
+Route::get('/admin/profile', [AuthController::class, 'profile'])->name('admin.profile')->middleware('auth');
 
 Route::get('admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
