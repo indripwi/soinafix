@@ -39,50 +39,56 @@
 
     <!-- Main CSS File -->
     <link href="{{ asset('Mentor/assets/css/main.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'mentor/assets/css/main.css' %}">
+    
 
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap"
         rel="stylesheet">
+<style>
+  .navbar-nav .nav-link.active {
+    color: red !important;
+    font-weight: bold;
+    border-bottom: 2px solid red;
+  }
+</style>
 
 </head>
 
 <body class="index-page">
 
-    <header id="header" class="header d-flex align-items-center sticky-top">
-        <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+   <header class="header sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container">
 
-            <a href="{{ route('homepage') }}" class="logo d-flex align-items-center me-auto">
-                <!-- Uncomment the line below if you also wish to use an image logo -->
-                <img src="{{ asset('Mentor/assets/img/soina2.jpg') }}" width="250">
-                <!-- <h1 class="sitename">SOINA</h1> -->
-            </a>
+      <a class="navbar-brand" href="{{ route('homepage') }}">
+        <img src="{{ asset('Mentor/assets/img/soina2.jpg') }}" width="200" class="img-fluid" alt="Logo SOINA">
+      </a>
 
-            <nav id="navmenu" class="navmenu me-auto ms-4">
-                <ul>
-                    <li><a href="{{ route('homepage') }}"
-                            class="{{ request()->routeIs('homepage') ? 'active' : '' }}">Home</a></li>
-                    <li><a href="{{ route('tentang') }}"
-                            class="{{ request()->routeIs('tentang') ? 'active' : '' }}">Tentang</a></li>
-                    <li><a href="{{ route('program') }}"
-                            class="{{ request()->routeIs('program') ? 'active' : '' }}">Program</a></li>
-                    <li><a href="{{ route('pengurus') }}"
-                            class="{{ request()->routeIs('pengurus') ? 'active' : '' }}">Pengurus</a></li>
-                    <li><a href="{{ route('prestasi') }}"
-                            class="{{ request()->routeIs('prestasi') ? 'active' : '' }}">Prestasi</a></li>
-                    <li><a href="{{ route('pendaftaran') }}"
-                            class="{{ request()->routeIs('pendaftaran') ? 'active' : '' }}">Pendaftaran</a></li>
-                    <li><a href="{{ route('pengumuman') }}"
-                            class="{{ request()->routeIs('pengumuman') ? 'active' : '' }}">Pengumuman</a></li>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-                </ul>
-            </nav>
-            <a href="{{ route('login') }}" class="d-flex align-items-center me-3">
-                <i class="bi bi-person-circle" style="font-size: 24px;"></i>
-            </a>
-        </div>
-    </header>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('homepage') ? 'active' : '' }}" href="{{ route('homepage') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('tentang') ? 'active' : '' }}" href="{{ route('tentang') }}">Tentang</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('program') ? 'active' : '' }}" href="{{ route('program') }}">Program</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('pengurus') ? 'active' : '' }}" href="{{ route('pengurus') }}">Pengurus</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('prestasi') ? 'active' : '' }}" href="{{ route('prestasi') }}">Prestasi</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('pendaftaran') ? 'active' : '' }}" href="{{ route('pendaftaran') }}">Pendaftaran</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('pengumuman') ? 'active' : '' }}" href="{{ route('pengumuman') }}">Pengumuman</a></li>
+        </ul>
+
+        <a href="{{ route('login') }}" class="d-flex align-items-center ms-3">
+          <i class="bi bi-person-circle" style="font-size: 24px;"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
     @yield('content')
     <footer id="footer" class="footer position-relative light-background">
         <div class="container footer-top">
