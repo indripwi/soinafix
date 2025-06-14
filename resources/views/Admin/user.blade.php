@@ -1,102 +1,111 @@
 @extends('layouts.Admin')
 
 @section('content')
-<div class="container">
-    <h1>Daftar Pengguna</h1>
-    
+<div class="container mt-4">
+    <h2 class="mb-4">Profil Admin</h2>
+
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Telepon</th>
-                <th>Alamat</th>
-                <th>Foto</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-            <tr>
-                <td>{{ $user->nama_user }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->telepon }}</td>
-                <td>{{ $user->alamat }}</td>
-                <td>
-                    @if($user->foto)
-                        <img src="{{ asset('storage/' . $user->foto) }}" width="50">
-                    @else
-                        -
-                    @endif
-                </td>
-                <td>
-                    <a href="{{ route('user.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('user.destroy', $user->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Hapus data ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-<form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
-<div class="mb-3">
-    <label>Nama</label>
-    <input type="text" name="nama_user" class="form-control" value="{{ old('nama_user', $user->nama_user ?? '') }}">
-    @error('nama_user') <div class="text-danger">{{ $message }}</div> @enderror
-</div>
+    {{-- Tabel Daftar Admin --}}
+    <div class="card mb-5">
+        <div class="card-header bg-primary text-white">Daftar Admin</div>
+        <div class="card-body">
+            <table class="table table-hover table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Telepon</th>
+                        <th>Alamat</th>
+                        <th>Foto</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($users as $user)
+                    <tr>
+                        <td>{{ $user->nama_user }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->telepon }}</td>
+                        <td>{{ $user->alamat }}</td>
+                        <td>
+                            @if($user->foto)
+                                <img src="{{ asset('storage/' . $user->foto) }}" width="80" class="rounded">
+                            @else
+                                <em>-</em>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash-alt"></i> Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<div class="mb-3">
-    <label>Email</label>
-    <input type="email" name="email" class="form-control" value="{{ old('email', $user->email ?? '') }}">
-    @error('email') <div class="text-danger">{{ $message }}</div> @enderror
-</div>
-
-<div class="mb-3">
-    <label>Telepon</label>
-    <input type="text" name="telepon" class="form-control" value="{{ old('telepon', $user->telepon ?? '') }}">
-    @error('telepon') <div class="text-danger">{{ $message }}</div> @enderror
-</div>
-
-<div class="mb-3">
-    <label>Alamat</label>
-    <textarea name="alamat" class="form-control">{{ old('alamat', $user->alamat ?? '') }}</textarea>
-    @error('alamat') <div class="text-danger">{{ $message }}</div> @enderror
-</div>
-
-<div class="mb-3">
-    <label>Foto</label>
-    <input type="file" name="foto" class="form-control">
-    @error('foto') <div class="text-danger">{{ $message }}</div> @enderror
-
-    @if(!empty($user->foto))
-        <img src="{{ asset('storage/' . $user->foto) }}" width="100" class="mt-2">
-    @endif
-</div>
- <button type="submit" class="btn btn-primary">Ubah Profil</button>
-{{-- Ubah Password --}}
-    <div class="row">
-        <div class="col-md-6">
-    
+    {{-- Form Edit Profil --}}
+    <div class="card">
+        <div class="card-header bg-success text-white">Edit Profil Anda</div>
+        <div class="card-body">
+            <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="mb-2">
-                    <label>Username</label>
-                    <input type="text" value="{{ $user->username }}" class="form-control">
+
+                @php $loginUser = auth()->user(); @endphp
+
+                <div class="mb-3">
+                    <label class="form-label">Nama</label>
+                    <input type="text" name="nama_user" class="form-control" value="{{ old('nama_user', $loginUser->nama_user ?? '') }}">
                 </div>
-                <div class="mb-2">
-                    <label>Password Baru</label>
-                    <input type="password" name="password" class="form-control" required>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $user->email ?? '') }}">
+                    @error('email') <div class="text-danger">{{ $message }}</div> @enderror
                 </div>
-                <button type="submit" class="btn btn-primary">Ubah Password</button>
+
+                <div class="mb-3">
+                    <label class="form-label">Telepon</label>
+                    <input type="text" name="telepon" class="form-control" value="{{ old('telepon', $user->telepon ?? '') }}">
+                    @error('telepon') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <textarea name="alamat" class="form-control">{{ old('alamat', $user->alamat ?? '') }}</textarea>
+                    @error('alamat') <div class="text-danger">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Foto</label>
+                    <input type="file" name="foto" class="form-control">
+                    @error('foto') <div class="text-danger">{{ $message }}</div> @enderror
+
+                    @if(!empty($user->foto))
+                        <div class="mt-2">
+                            <img src="{{ asset('storage/' . $user->foto) }}" width="150" class="rounded shadow">
+                        </div>
+                    @endif
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Ubah Profil
+                </button>
             </form>
         </div>
     </div>
+</div>
 @endsection

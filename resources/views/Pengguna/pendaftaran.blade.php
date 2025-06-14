@@ -43,243 +43,207 @@
 
         <div class="container">
             <div class="">
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Oops!</strong> Ada kesalahan pada input Anda:<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                @if (session('success'))
-                    <script>
-                        toastr.success(
-                            '{{ session('
-                                                                                                                                                                                success ') }}'
-                        );
-                    </script>
-                @endif
-
-                <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data"
-                    class="row g-3">
-                    @csrf
-
-                    <div class="col-md-6 mb-3">
-                        <label for="nama_pendaftar" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="nama_pendaftar" name="nama_pendaftar"
-                            value="{{ old('nama_pendaftar') }}" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="nik" class="form-label">NIK</label>
-                        <input type="text" class="form-control" id="nik" name="nik" value="{{ old('nik') }}"
-                            required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="nomor_telepon" name="nomor_telepon"
-                            value="{{ old('nomor_telepon') }}" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                        <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
-                            <option value="">Jenis Kelamin</option>
-                            <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki
-                            </option>
-                            <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
-                        <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir"
-                            value="{{ old('tempat_lahir') }}" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                        <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir"
-                            value="{{ old('tanggal_lahir') }}" required>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label for="alamat" class="form-label">Alamat Lengkap</label>
-                        <textarea class="form-control" id="alamat" name="alamat" rows="3" required>{{ old('alamat') }}</textarea>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="sekolah" class="form-label">Asal Sekolah</label>
-                        <input type="text" class="form-control" id="sekolah" name="sekolah"
-                            value="{{ old('sekolah') }}" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="kelas" class="form-label">Kelas</label>
-                        <input type="text" class="form-control" id="kelas" name="kelas"
-                            value="{{ old('kelas') }}" required>
-                    </div>
-
-                    <hr class="my-4">
-                    <h5 class="mb-3">Upload Dokumen</h5>
-
-                    @foreach ([
-            'file_akta' => 'Akta Kelahiran, pdf,jpg,jpeg,png',
-            'file_kk' => 'Kartu Keluarga, pdf,jpg,jpeg,png',
-            'file_foto' => 'Pas Foto, jpg,jpeg,png',
-            'file_raport' => 'Raport Terakhir, pdf,jpg,jpeg,png',
-            'file_psikolog' => 'Tes Psikologi, pdf,jpg,jpeg,png',
-        ] as $name => $label)
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ $name }}" class="form-label">{{ $label }}</label>
-                            <input class="form-control" type="file" id="{{ $name }}"
-                                name="{{ $name }}" required>
-                        </div>
-                    @endforeach
-
-                    <div class="col-12 text-center mt-4">
-                        <button type="submit" class="btn btn-danger px-5 py-2">Kirim Pendaftaran</button>
-                    </div>
-                </form>
-
-                <div class="container py-5">
-                    <h2 class="mb-4 text-center">Riwayat Pendaftaran</h2>
-
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered align-middle">
-                            <thead class="table-danger text-center">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>NIK</th>
-                                    <th>No. Telpon</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>Tempat Lahir</th>
-                                    <th>Tanggal Lahir</th>
-                                    <th>Alamat</th>
-                                    <th>Sekolah</th>
-                                    <th>Kelas</th>
-                                    <th>Akta</th>
-                                    <th>KK</th>
-                                    <th>Foto</th>
-                                    <th>Raport</th>
-                                    <th>Psikologi</th>
-                                    <th>Tanggal</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($pendaftarans as $index => $item)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $item->nama_pendaftar }}</td>
-                                        <td>{{ $item->nik }}</td>
-                                        <td>{{ $item->nomor_telepon }}</td>
-                                        <td>{{ $item->jenis_kelamin }}</td>
-                                        <td>{{ $item->tempat_lahir }}</td>
-                                        <td>{{ $item->tanggal_lahir }}</td>
-                                        <td>{{ $item->alamat }}</td>
-                                        <td>{{ $item->sekolah }}</td>
-                                        <td>{{ $item->kelas }}</td>
-                                        @php
-                                            $folderMap = [
-                                                'file_akta' => 'akta',
-                                                'file_kk' => 'kk',
-                                                'file_foto' => 'foto',
-                                                'file_raport' => 'raport',
-                                                'file_psikolog' => 'psikolog',
-                                            ];
-                                        @endphp
-
-                                        @foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $file)
-                                            <td>
-                                                @if ($item->$file)
-                                                    <a href="{{ asset('storage/' . $item->$file) }}" target="_blank"
-                                                        class="btn btn-sm btn-outline-primary mb-1">
-                                                        <i class="fas fa-eye"></i> Lihat
-                                                    </a>
-                                                    <a href="{{ route('pendaftar.download', ['file' => $item->$file]) }}"
-                                                        class="btn btn-sm btn-outline-success">
-                                                        <i class="fas fa-download"></i> Unduh
-                                                    </a>
-                                                @else
-                                                    <em class="text-muted">-</em>
-                                                @endif
-                                            </td>
-                                        @endforeach
-                                        <td>{{ $item->created_at->format('d-m-Y') }}</td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                <a href="{{ route('pendaftaran.edit', ['slug' => $item->slug]) }}"
-                                                    class="btn btn-success btn-sm">Edit</a>
-
-                                                <form action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                                                </form>
-
-                                            </div>
-                                        </td>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+               <!-- Alerts -->
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Oops!</strong> Ada kesalahan pada input Anda:
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-    </main>
-    @guest
-        <!-- Modal tanpa tombol silang dan tidak bisa ditutup -->
-        <div class="modal fade" id="guestLoginModal" tabindex="-1" aria-labelledby="guestLoginModalLabel"
-            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content shadow-lg">
-                    <div class="modal-header bg-warning text-dark">
-                        <h5 class="modal-title" id="guestLoginModalLabel">Anda belum login</h5>
-                        <!-- HAPUS tombol close/silang -->
-                    </div>
-                    <div class="modal-body text-center">
-                        <p>Untuk melanjutkan pendaftaran, silakan login atau registrasi terlebih dahulu.</p>
-                        <div class="d-flex justify-content-center gap-3 mt-4">
-                            <a href="{{ route('login') }}" class="btn btn-primary px-4">Login</a>
-                            <a href="{{ route('register') }}" class="btn btn-outline-secondary px-4">Registrasi</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endif
 
-        <!-- Tampilkan modal saat halaman dimuat -->
+        @if (session('success'))
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var guestModal = new bootstrap.Modal(document.getElementById('guestLoginModal'), {
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                guestModal.show();
-            });
+            toastr.success("{{ session('success') }}");
         </script>
-    @endguest
+        @endif
 
+        <!-- Form -->
+        <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data" class="row g-3">
+            @csrf
 
-    <!-- SweetAlert2 CDN (jika belum ada) -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <div class="col-md-6">
+                <label for="nama_pendaftar" class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" name="nama_pendaftar" value="{{ old('nama_pendaftar') }}" required>
+            </div>
 
-    <script>
-    document.getElementById("logout-button").addEventListener("click", function(e) {
+            <div class="col-md-6">
+                <label for="nik" class="form-label">NIK</label>
+                <input type="text" class="form-control" name="nik" value="{{ old('nik') }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
+                <input type="text" class="form-control" name="nomor_telepon" value="{{ old('nomor_telepon') }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                <select name="jenis_kelamin" class="form-select" required>
+                    <option value="">Pilih</option>
+                    <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                <input type="text" class="form-control" name="tempat_lahir" value="{{ old('tempat_lahir') }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                <input type="date" class="form-control" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required>
+            </div>
+
+            <div class="col-12">
+                <label for="alamat" class="form-label">Alamat</label>
+                <textarea class="form-control" name="alamat" rows="3" required>{{ old('alamat') }}</textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label for="sekolah" class="form-label">Asal Sekolah</label>
+                <input type="text" class="form-control" name="sekolah" value="{{ old('sekolah') }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="kelas" class="form-label">Kelas</label>
+                <input type="text" class="form-control" name="kelas" value="{{ old('kelas') }}" required>
+            </div>
+
+            <hr class="mt-4">
+            <h5>Upload Dokumen</h5>
+
+            @foreach([
+                'file_akta' => 'Akta Kelahiran',
+                'file_kk' => 'Kartu Keluarga',
+                'file_foto' => 'Pas Foto',
+                'file_raport' => 'Raport Terakhir',
+                'file_psikolog' => 'Tes Psikologi'
+            ] as $name => $label)
+            <div class="col-md-6">
+                <label for="{{ $name }}" class="form-label">{{ $label }}</label>
+                <input type="file" class="form-control" name="{{ $name }}" required>
+            </div>
+            @endforeach
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-danger px-5 py-2">Kirim Pendaftaran</button>
+            </div>
+        </form>
+
+        <!-- Riwayat -->
+        <div class="mt-5">
+            <h3 class="text-center mb-3">Riwayat Pendaftaran</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered text-center">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>NIK</th>
+                            <th>No. Telepon</th>
+                            <th>JK</th>
+                            <th>Tempat</th>
+                            <th>Tanggal</th>
+                            <th>Alamat</th>
+                            <th>Sekolah</th>
+                            <th>Kelas</th>
+                            <th>Akta</th>
+                            <th>KK</th>
+                            <th>Foto</th>
+                            <th>Raport</th>
+                            <th>Psikolog</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pendaftarans as $index => $item)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $item->nama_pendaftar }}</td>
+                            <td>{{ $item->nik }}</td>
+                            <td>{{ $item->nomor_telepon }}</td>
+                            <td>{{ $item->jenis_kelamin }}</td>
+                            <td>{{ $item->tempat_lahir }}</td>
+                            <td>{{ $item->tanggal_lahir }}</td>
+                            <td>{{ $item->alamat }}</td>
+                            <td>{{ $item->sekolah }}</td>
+                            <td>{{ $item->kelas }}</td>
+
+                            @foreach (['file_akta', 'file_kk', 'file_foto', 'file_raport', 'file_psikolog'] as $file)
+                            <td>
+                                @if ($item->$file)
+                                <a href="{{ asset('storage/' . $item->$file) }}" class="btn btn-sm btn-outline-primary mb-1" target="_blank">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ route('pendaftar.download', ['file' => $item->$file]) }}" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                @else
+                                <em>-</em>
+                                @endif
+                            </td>
+                            @endforeach
+
+                            <td>{{ $item->created_at->format('d-m-Y') }}</td>
+                            <td>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a href="{{ route('pendaftaran.edit', ['slug' => $item->slug]) }}" class="btn btn-sm btn-success">Edit</a>
+                                    <form action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- Modal Login -->
+@guest
+<div class="modal fade" id="guestLoginModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Anda belum login</h5>
+            </div>
+            <div class="modal-body text-center">
+                <p>Silakan login atau registrasi terlebih dahulu untuk melanjutkan pendaftaran.</p>
+                <div class="d-flex justify-content-center gap-3 mt-3">
+                    <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline-secondary">Registrasi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var guestModal = new bootstrap.Modal(document.getElementById('guestLoginModal'));
+        guestModal.show();
+    });
+</script>
+@endguest
+
+<!-- Logout SweetAlert -->
+<script>
+    document.getElementById("logout-button")?.addEventListener("click", function(e) {
         e.preventDefault();
-
         Swal.fire({
-            title: 'Anda yakin ingin keluar?',
-            text: "Anda akan keluar dari sesi login.",
+            title: 'Yakin ingin logout?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -288,12 +252,12 @@
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.removeItem("guestModalShown");
                 document.getElementById('logout-form').submit();
             }
         });
     });
 </script>
+
 
 
 

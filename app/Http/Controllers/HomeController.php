@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
     public function homepage()
 {
-    $programs = Program::orderBy('created_at', 'asc')->take(4)->get();
+    $programs = Program::orderBy('created_at', 'asc')->take(3)->get();
    $coaches = Coache::orderBy('created_at', 'asc')->take(3)->get();
     return view('Pengguna.homepage', compact('programs', 'coaches'));
 }

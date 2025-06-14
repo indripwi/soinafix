@@ -2,13 +2,6 @@
 <html lang="en">
 
 <head>
-    @auth
-    <p>🔐 Logged in sebagai: {{ Auth::user()->name }}</p>
-@endauth
-
-@guest
-    <p>🔓 Kamu belum login (guest)</p>
-@endguest
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

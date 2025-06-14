@@ -66,19 +66,19 @@ Route::get('admin/upload-program', [OlahragaController::class, 'index'])->name('
 Route::post('admin/upload-program-store', [OlahragaController::class, 'store'])->name('olahraga.store');
 Route::get('/admin/upload-program-edit/{slug}', [OlahragaController::class, 'edit'])->name('olahraga.edit');
 Route::put('/admin/upload-program-update/{slug}', [OlahragaController::class, 'update'])->name('olahraga.update');
-Route::get('/admin/upload-program-hapus/{slug}', [OlahragaController::class, 'hapus'])->name('olahraga.hapus');
+Route::delete('/admin/upload-program-hapus/{slug}', [OlahragaController::class, 'hapus'])->name('olahraga.hapus');
 
 Route::get('admin/upload-prestasi', [PrestasiController::class, 'index'])->name('prestasi.index');
 Route::post('admin/upload-prestasi-store', [PrestasiController::class, 'store'])->name('prestasi.store');
 Route::get('/admin/upload-prestasi-edit/{slug}', [PrestasiController::class, 'edit'])->name('prestasi.edit');
 Route::put('/admin/upload-prestasi-update/{slug}', [PrestasiController::class, 'update'])->name('prestasi.update');
-Route::get('/admin/upload-prestasi-hapus/{slug}', [PrestasiController::class, 'hapus'])->name('prestasi.hapus');
+Route::delete('/admin/upload-prestasi-hapus/{slug}', [PrestasiController::class, 'hapus'])->name('prestasi.hapus');
 
 Route::get('admin/upload-pengurus', [PengurusController::class, 'index'])->name('pengurus.index');
 Route::post('admin/upload-pengurus-store', [PengurusController::class, 'store'])->name('pengurus.store');
 Route::get('/admin/upload-pengurus-edit/{slug}', [PengurusController::class, 'edit'])->name('pengurus.edit');
 Route::put('/admin/upload-pengurus-update/{slug}', [PengurusController::class, 'update'])->name('pengurus.update');
-Route::get('/admin/upload-pengurus-hapus/{slug}', [PengurusController::class, 'hapus'])->name('pengurus.hapus');
+Route::delete('/admin/upload-pengurus-hapus/{slug}', [PengurusController::class, 'hapus'])->name('pengurus.hapus');
 
 Route::get('admin/upload-pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
 Route::post('admin/upload-pengumuman-store', [PengumumanController::class, 'store'])->name('pengumuman.store');
@@ -95,6 +95,7 @@ Route::delete('/admin/pendaftar-hapus/{slug}', [PendaftarController::class, 'hap
 
 Route::get('admin/user', [UserBiodataController::class, 'index'])->name('user.index');
 Route::post('admin/user-store', [UserBiodataController::class, 'store'])->name('user.store');
+Route::resource('biodata', UserBiodataController::class);
 Route::get('admin/user-edit/{slug}', [UserBiodataController::class, 'edit'])->name('user.edit');
 Route::get('admin/user-hapus/{slug}', [UserBiodataController::class, 'hapus'])->name('user.hapus');
 Route::get('admin/user-create/', [UserBiodataController::class, 'create'])->name('user.create');

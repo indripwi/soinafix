@@ -32,7 +32,7 @@
 </head>
 
 <body>
-     <!-- CSS Files -->
+    <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/css/kaiadmin.min.css') }}" />
@@ -124,7 +124,7 @@
                         <li class="nav-item {{ request()->routeIs('admin.setting.index') ? 'active' : '' }}">
                             <a href="{{ route('admin.setting.index') }}">
                                 <i class="fas fa-user"></i>
-                                <p>Setting</p>
+                                <p>Setting Pendaftaran</p>
                             </a>
                         </li>
                         <!-- Tambahkan item lainnya juga di luar dropdown -->
@@ -191,53 +191,51 @@
                     </div>
                     <!-- End Logo Header -->
                 </div>
-                <!-- Navbar Header -->
+                @php
+                    $biodata = Auth::user()->biodata;
+                @endphp
+
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
-                        <nav
-                            class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-
-                        </nav>
 
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-                            
-                            
                             <li class="nav-item topbar-user dropdown hidden-caret">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
+                                    
                                     <div class="avatar-sm">
-                                        <img src="admin/img/logo-botak.jpg" alt="..."
-                                            class="avatar-img rounded-circle" />
+                                        <img src="{{ $biodata && $biodata->foto ? asset('storage/' . $biodata->foto) : asset('admin/img/logo-botak.jpg') }}"
+                                            alt="Foto" class="avatar-img rounded-circle" />
                                     </div>
                                     <span class="profile-username">
                                         <span class="op-7">Hi,</span>
-                                        <span class="fw-bold">Admin</span>
+                                        <span class="fw-bold">{{ $biodata->nama_user ?? Auth::user()->name }}</span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
                                     <div class="dropdown-user-scroll scrollbar-outer">
                                         <li>
-                                            
                                             <div class="user-box">
                                                 <div class="avatar-lg">
-                                                    <img src="{{ asset('admin/img/logo-botak.jpg') }}"
-                                                        alt="image profile" class="avatar-img rounded" />
+                                                    <img src="{{ $biodata && $biodata->foto ? asset('storage/' . $biodata->foto) : asset('admin/img/logo-botak.jpg') }}"
+                                                        alt="Foto Profil" class="avatar-img rounded-circle" />
                                                 </div>
                                                 <div class="u-text">
-                                                    <h4>HiAdmin</h4>
-                                                    <p class="text-muted">admin@example.com</p>
-                                                    <a href="{{ route('user.index') }}" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-                                                        
+                                                    <h4>{{ $biodata->nama_user ?? Auth::user()->name }}</h4>
+                                                    <p class="text-muted">{{ $biodata->email ?? Auth::user()->email }}
+                                                    </p>
+                                                    <a href="{{ route('user.index') }}"
+                                                        class="btn btn-xs btn-secondary btn-sm">View Profile</a>
                                                 </div>
                                             </div>
-    </li>
+                                        </li>
                                     </div>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </nav>
-                <!-- End Navbar -->
+
             </div>
 
             <div class="container">
@@ -295,14 +293,14 @@
                     });
                 }
             </script>
-            
+
 
             <!-- Toastr CSS -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
             <!-- Toastr JS -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-            
+
 
 
 </body>

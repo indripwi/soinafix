@@ -60,7 +60,7 @@
                 <tbody>
                     @forelse ($prestasis as $item)
                     <tr>
-                        <td>1</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->nama_atlet }}</td>
                         <td>{{ $item->cabang_olahraga }}</td>
                         <td>
@@ -73,9 +73,12 @@
                             <a class="btn btn-success btn-sm" href="{{ route('prestasi.edit', $item->slug) }}">
                                 Edit
                             </a>
-                            <button class="btn btn-danger btn-sm btn-delete" data-url="{{ route('prestasi.hapus', $item->slug) }}">
-                                Hapus
-                            </button>
+                            <form action="{{ route('prestasi.hapus', $item->slug) }}" method="POST"
+                                        class="form-delete d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm btn-delete">Hapus</button>
+                                    </form>
 
                         </td>
 
@@ -131,45 +134,48 @@
         </div>
     </div>
 </div>
-{{-- Load SweetAlert2 --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.btn-delete');
+    {{-- Load SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const url = this.getAttribute('data-url');
+    {{-- Script untuk konfirmasi hapus --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.btn-delete');
 
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Data program akan dihapus permanen!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const form = this.closest('form');
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
                 });
             });
+
+            // Notifikasi sukses setelah simpan/edit/hapus
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: '{{ session('success') }}',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            @endif
         });
-    });
-</script>
-@if (session('success'))
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        text: '{{ session('
-        success ') }}',
-        showConfirmButton: false,
-        timer: 2000
-    });
-</script>
-@endif
+    </script>
 @endsection

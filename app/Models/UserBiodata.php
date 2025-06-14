@@ -40,4 +40,15 @@ class UserBiodata extends Model
         ];
     }
 
+    // app/Models/User.php
+public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+public function biodata()
+{
+    return $this->hasOne(UserBiodata::class);
+}
+
 }

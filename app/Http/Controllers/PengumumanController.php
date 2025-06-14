@@ -40,7 +40,7 @@ class PengumumanController extends Controller
     if ($request->hasFile('image')) {
         $extension = $request->file('image')->getClientOriginalExtension();
         $imageName = 'img-' . now()->timestamp . '.' . $extension;
-        $request->file('image')->storeAs('public/foto', $imageName);
+        $request->file('image')->storeAs('foto', $imageName);
         $pengumuman->gambar_url = $imageName;
     }
 
@@ -81,8 +81,8 @@ class PengumumanController extends Controller
 
     // Handle PDF
     if ($request->hasFile('pdf_file')) {
-        if ($announcement->pdf_file && Storage::exists('public/announcements/' . $announcement->pdf_file)) {
-            Storage::delete('public/announcements/' . $announcement->pdf_file);
+        if ($announcement->pdf_file && Storage::exists('announcements/' . $announcement->pdf_file)) {
+            Storage::delete('announcements/' . $announcement->pdf_file);
         }
 
         $pdfName = 'pdf-' . time() . '_' . $request->file('pdf_file')->getClientOriginalName();
@@ -94,7 +94,7 @@ class PengumumanController extends Controller
     if ($request->hasFile('new_images')) {
         foreach ($request->file('new_images') as $image) {
             $filename = 'img-rel-' . time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/announcement-images', $filename);
+            $image->storeAs('announcement-images', $filename);
             $announcement->images()->create([
                 'gambar_url' => 'announcement-images/' . $filename
             ]);
@@ -123,12 +123,12 @@ class PengumumanController extends Controller
     {
         $announcement = Announcement::where('slug', $slug)->firstOrFail();
 
-        if ($announcement->gambar_url && Storage::exists('public/foto/' . $announcement->gambar_url)) {
-            Storage::delete('public/foto/' . $announcement->gambar_url);
+        if ($announcement->gambar_url && Storage::exists('foto/' . $announcement->gambar_url)) {
+            Storage::delete('foto/' . $announcement->gambar_url);
         }
 
-        if ($announcement->pdf_file && Storage::exists('public/announcements/' . $announcement->pdf_file)) {
-            Storage::delete('public/announcements/' . $announcement->pdf_file);
+        if ($announcement->pdf_file && Storage::exists('announcements/' . $announcement->pdf_file)) {
+            Storage::delete('announcements/' . $announcement->pdf_file);
         }
 
         $announcement->delete();

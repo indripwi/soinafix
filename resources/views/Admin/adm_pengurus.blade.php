@@ -56,9 +56,12 @@
                         </td>
                         <td>
                             <a href="{{ route('pengurus.edit', $item->slug) }}" class="btn btn-warning btn-sm me-1">Edit</a>
-                            <button class="btn btn-danger btn-sm btn-delete" data-url="{{ route('pengurus.hapus', $item->slug) }}">
-                                Hapus
-                            </button>
+                            <form action="{{ route('pengurus.hapus', $item->slug) }}" method="POST"
+                                        class="form-delete d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm btn-delete">Hapus</button>
+                                    </form>
                         </td>
                     </tr>
                     @empty
@@ -105,45 +108,47 @@
         </div>
     </div>
 </div>
-{{-- Load SweetAlert2 --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ {{-- Load SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.btn-delete');
+    {{-- Script untuk konfirmasi hapus --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.btn-delete');
 
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const url = this.getAttribute('data-url');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
 
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Data program akan dihapus permanen!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
+                    const form = this.closest('form');
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
                 });
             });
+
+            // Notifikasi sukses setelah simpan/edit/hapus
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: '{{ session('success') }}',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            @endif
         });
-    });
-</script>
-@if (session('success'))
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        text: '{{ session('
-        success ') }}',
-        showConfirmButton: false,
-        timer: 2000
-    });
-</script>
-@endif
+    </script>
 @endsection
