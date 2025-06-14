@@ -5,8 +5,8 @@
   <!-- Page Title -->
   <div class="page-title bg-danger text-white py-5" data-aos="fade">
     <div class="container text-center">
-      <h1 class="mb-1">Pengumuman</h1>
-      <p class="mb-0">Informasi terbaru untuk Anda</p>
+      <h1 class="mb-1 display-5">Pengumuman</h1>
+      <p class="mb-0 lead">Informasi terbaru untuk Anda</p>
     </div>
     <nav class="breadcrumbs mt-3">
       <div class="container">
@@ -20,25 +20,28 @@
   <!-- End Page Title -->
 
   <div class="container my-5">
-    <div class="row">
+    <div class="row justify-content-center">
       @forelse($announcement as $item)
-      <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up">
-        <div class="card h-100 shadow border-0">
+      <div class="col-md-8 col-lg-6 mb-5" data-aos="fade-up">
+        <div class="card shadow-lg border-0 text-center h-100">
+          <!-- Judul di atas gambar -->
+          <div class="card-header">
+            <h4 class="card-title text-danger mb-0">{{ $item->title }}</h4>
+          </div>
+
           @if($item->gambar_url)
           <img src="{{ asset('storage/foto/' . $item->gambar_url) }}" class="card-img-top" alt="Gambar Pengumuman">
           @else
           <img src="{{ asset('img/foto-tidak-ada.png') }}" class="card-img-top" alt="Gambar Tidak Tersedia">
           @endif
 
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title text-danger">{{ $item->title }}</h5>
-
+          <div class="card-footer bg-white border-0">
             @if($item->pdf_file)
-            <a href="{{ route('pengumuman.download', $item->id) }}" class="btn btn-outline-primary btn-sm mt-auto">
-              <i class="bi bi-download"></i> Download PDF
-            </a>
+              <a href="{{ route('pengumuman.download', $item->id) }}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-download"></i> Download PDF
+              </a>
             @else
-            <span class="text-muted small">Tidak ada file PDF</span>
+              <span class="text-muted small">Tidak ada file PDF</span>
             @endif
           </div>
         </div>

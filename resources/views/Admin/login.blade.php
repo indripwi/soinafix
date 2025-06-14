@@ -104,9 +104,10 @@
             <h2>Sign Up</h2>
             <form action="{{ route('register.process') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="text" placeholder="Nama Lengkap" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
+                <input type="text" name="name" placeholder="Nama Lengkap" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
                 <button type="submit">Sign Up</button>
             </form>
             <div class="switch">

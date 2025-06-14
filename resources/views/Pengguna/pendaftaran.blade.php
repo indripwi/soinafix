@@ -1,29 +1,24 @@
 @extends('layouts.Pengguna')
 
 @section('content')
-    <!-- SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <main class="main">
-        <!-- Page Title -->
-        <div class="page-title" data-aos="fade">
-            <div class="heading">
-                <div class="container">
-                    <div class="row d-flex justify-content-center text-center">
-                        <div class="col-lg-8">
-                            <h1>Pendaftaran</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <nav class="breadcrumbs">
-                <div class="container d-flex justify-content-between align-items-center">
-                    <ol class="mb-0">
-                        <li><a href="{{ route('homepage') }}">Home</a></li>
-                        <li class="current">Pendaftaran</li>
-                    </ol>
+<main class="main">
 
-                    @auth
+    <!-- Page Title -->
+    <div class="page-title bg-danger text-white py-5 shadow-sm" data-aos="fade">
+        <div class="container text-center">
+            <h1 class="fw-bold">Pendaftaran</h1>
+            <p class="mt-2">Lengkapi formulir berikut untuk mendaftar sebagai atlet SOIna</p>
+        </div>
+        <nav class="breadcrumbs mt-3">
+            <div class="container text-center">
+                <ol class="breadcrumb justify-content-center mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('homepage') }}" class="text-white">Home</a></li>
+                    <li class="breadcrumb-item active text-white">Pendaftaran</li>
+                </ol>
+                 @auth
                         <button id="logout-button" class="btn btn-outline-light d-flex align-items-center gap-2">
                             <i class="fas fa-sign-out-alt"></i>
                             Logout
@@ -34,16 +29,12 @@
                             @csrf
                         </form>
                     @endauth
+            </div>
+        </nav>
+    </div>
 
-                </div>
-            </nav>
-
-
-        </div>
-
-        <div class="container">
-            <div class="">
-               <!-- Alerts -->
+    <div class="container my-5">
+        <!-- Alerts -->
         @if ($errors->any())
         <div class="alert alert-danger">
             <strong>Oops!</strong> Ada kesalahan pada input Anda:
@@ -114,7 +105,7 @@
                 <input type="text" class="form-control" name="kelas" value="{{ old('kelas') }}" required>
             </div>
 
-            <hr class="mt-4">
+            
             <h5>Upload Dokumen</h5>
 
             @foreach([
@@ -136,6 +127,7 @@
         </form>
 
         <!-- Riwayat -->
+        <hr class="mt-4">
         <div class="mt-5">
             <h3 class="text-center mb-3">Riwayat Pendaftaran</h3>
             <div class="table-responsive">
@@ -207,8 +199,8 @@
                 </table>
             </div>
         </div>
-
     </div>
+
 </main>
 
 <!-- Modal Login -->
@@ -257,8 +249,4 @@
         });
     });
 </script>
-
-
-
-
 @endsection
