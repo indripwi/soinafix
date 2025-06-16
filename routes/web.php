@@ -59,6 +59,12 @@ Route::post('/verify-code', [AuthController::class, 'verifyCode'])->name('passwo
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
 Route::get('/admin/profile', [AuthController::class, 'profile'])->name('admin.profile')->middleware('auth');
+Route::put('/admin/profile/{id}', [AuthController::class, 'updateProfile'])->middleware('auth');
+Route::get('/admin/profile', [AuthController::class, 'profile'])->middleware('auth');
+Route::get('/admin/profil', [AuthController::class, 'profile'])->name('admin.profile');
+Route::post('/admin/profil/update/{id}', [AuthController::class, 'updateProfile'])->name('admin.updateProfile');
+
+
 
 Route::get('admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -92,13 +98,14 @@ Route::get('/admin/pendaftar/export', [PendaftarController::class, 'export'])->n
 Route::get('/pendaftar/download', [PendaftaranController::class, 'download'])->name('pendaftar.download');
 Route::delete('/admin/pendaftar-hapus/{slug}', [PendaftarController::class, 'hapus'])->name('pendaftar.hapus');
 
-
+Route::get('/admin/profil', [UserBiodataController::class, 'profile'])->name('admin.profil');
 Route::get('admin/user', [UserBiodataController::class, 'index'])->name('user.index');
 Route::post('admin/user-store', [UserBiodataController::class, 'store'])->name('user.store');
 Route::resource('biodata', UserBiodataController::class);
 Route::get('admin/user-edit/{slug}', [UserBiodataController::class, 'edit'])->name('user.edit');
 Route::get('admin/user-hapus/{slug}', [UserBiodataController::class, 'hapus'])->name('user.hapus');
 Route::get('admin/user-create/', [UserBiodataController::class, 'create'])->name('user.create');
+
 Route::post('/pendaftar/{id}/status', [PendaftarController::class, 'updateStatus'])->name('pendaftar.updateStatus');
 
 Route::resource('user', UserBiodataController::class);

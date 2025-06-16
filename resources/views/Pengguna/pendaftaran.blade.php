@@ -6,6 +6,10 @@
 
 <main class="main">
 
+    <!-- Tombol Logout -->
+
+
+
     <!-- Page Title -->
     <div class="page-title bg-danger text-white py-5 shadow-sm" data-aos="fade">
         <div class="container text-center">
@@ -18,20 +22,20 @@
                     <li class="breadcrumb-item"><a href="{{ route('homepage') }}" class="text-white">Home</a></li>
                     <li class="breadcrumb-item active text-white">Pendaftaran</li>
                 </ol>
-                 @auth
-                        <button id="logout-button" class="btn btn-outline-light d-flex align-items-center gap-2">
-                            <i class="fas fa-sign-out-alt"></i>
-                            Logout
-                        </button>
-
-                        <!-- Hidden form for actual logout -->
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    @endauth
             </div>
         </nav>
     </div>
+    @auth
+    <div class="container mt-2 d-flex justify-content-end">
+        <button id="logout-button" class="btn btn-outline-danger d-flex align-items-center gap-2 btn-sm">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    </div>
+    @endauth
 
     <div class="container my-5">
         <!-- Alerts -->
@@ -48,9 +52,15 @@
 
         @if (session('success'))
         <script>
-            toastr.success("{{ session('success') }}");
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#d33'
+            });
         </script>
         @endif
+
 
         <!-- Form -->
         <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data" class="row g-3">
@@ -87,7 +97,10 @@
 
             <div class="col-md-6">
                 <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                <input type="date" class="form-control" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required>
+                <input type="date" class="form-control" name="tanggal_lahir"
+    value="{{ old('tanggal_lahir', isset($item) ? \Carbon\Carbon::parse($item->tanggal_lahir)->format('Y-m-d') : '') }}"
+    required>
+
             </div>
 
             <div class="col-12">
@@ -105,15 +118,14 @@
                 <input type="text" class="form-control" name="kelas" value="{{ old('kelas') }}" required>
             </div>
 
-            
             <h5>Upload Dokumen</h5>
 
             @foreach([
-                'file_akta' => 'Akta Kelahiran',
-                'file_kk' => 'Kartu Keluarga',
-                'file_foto' => 'Pas Foto',
-                'file_raport' => 'Raport Terakhir',
-                'file_psikolog' => 'Tes Psikologi'
+            'file_akta' => 'Akta Kelahiran',
+            'file_kk' => 'Kartu Keluarga',
+            'file_foto' => 'Pas Foto',
+            'file_raport' => 'Raport Terakhir',
+            'file_psikolog' => 'Tes Psikologi'
             ] as $name => $label)
             <div class="col-md-6">
                 <label for="{{ $name }}" class="form-label">{{ $label }}</label>
@@ -126,6 +138,7 @@
             </div>
         </form>
 
+        
         <!-- Riwayat -->
         <hr class="mt-4">
         <div class="mt-5">
@@ -140,7 +153,7 @@
                             <th>No. Telepon</th>
                             <th>JK</th>
                             <th>Tempat</th>
-                            <th>Tanggal</th>
+                            <th>Tanggal Lahir</th>
                             <th>Alamat</th>
                             <th>Sekolah</th>
                             <th>Kelas</th>
@@ -162,7 +175,7 @@
                             <td>{{ $item->nomor_telepon }}</td>
                             <td>{{ $item->jenis_kelamin }}</td>
                             <td>{{ $item->tempat_lahir }}</td>
-                            <td>{{ $item->tanggal_lahir }}</td>
+                            <td>{{ $item->tanggal_lahir->format('d-m-Y') }}</td>
                             <td>{{ $item->alamat }}</td>
                             <td>{{ $item->sekolah }}</td>
                             <td>{{ $item->kelas }}</td>
@@ -182,15 +195,16 @@
                             </td>
                             @endforeach
 
-                            <td>{{ $item->created_at->format('d-m-Y') }}</td>
+                            <td>{{ $item->tanggal_lahir->format('d-m-Y') }}</td>
                             <td>
                                 <div class="d-flex gap-2 justify-content-center">
                                     <a href="{{ route('pendaftaran.edit', ['slug' => $item->slug]) }}" class="btn btn-sm btn-success">Edit</a>
-                                    <form action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                                    <form class="form-hapus" data-nama="{{ $item->nama_pendaftar }}" action="{{ route('pendaftaran.hapus', ['slug' => $item->slug]) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                                     </form>
+
                                 </div>
                             </td>
                         </tr>
@@ -199,8 +213,19 @@
                 </table>
             </div>
         </div>
+        @auth
+    <div class="container mt-2 d-flex justify-content-end">
+        <button id="logout-button" class="btn btn-outline-danger d-flex align-items-center gap-2 btn-sm">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
     </div>
-
+    @endauth
+    </div>
+    
 </main>
 
 <!-- Modal Login -->
@@ -223,7 +248,7 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         var guestModal = new bootstrap.Modal(document.getElementById('guestLoginModal'));
         guestModal.show();
     });
@@ -249,4 +274,30 @@
         });
     });
 </script>
+<script>
+    // Konfirmasi sebelum menghapus data
+    document.querySelectorAll('.form-hapus').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Cegah submit langsung
+
+            const nama = this.getAttribute('data-nama') || 'data ini';
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: Data atas nama "${nama}" akan dihapus secara permanen.,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit(); // Submit form jika dikonfirmasi
+                }
+            });
+        });
+    });
+</script>
+
 @endsection

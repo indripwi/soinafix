@@ -21,8 +21,6 @@ class AuthController extends Controller
         return view('Admin.login');
     }
 
-    
-
     public function process(Request $request)
     {
         $request->validate([
@@ -159,5 +157,43 @@ class AuthController extends Controller
         DB::table('password_resets')->where('email', $request->email)->delete();
 
         return redirect('/login')->with('status', 'Password berhasil direset. Silakan login.');
+    }
+
+    public function profile()
+    {
+        $loginUser = auth()->user();
+        $biodata = $loginUser->biodata; // <-- Pastikan ini ada
+
+        return view('Admin.profile', compact('loginUser', 'biodata'));
+    }
+
+
+
+
+    public function updateProfile(Request $request, $id)
+    {
+        $request->validate([
+            'nama_user' => 'required|string|max:100',
+            'email' => 'required|email|max:100',
+            'telepon' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
+            'foto' => 'nullable|image|max:2048',
+        ]);
+
+        $biodata = \App\Models\UserBiodata::findOrFail($id);
+
+        $biodata->nama_user = $request->nama_user;
+        $biodata->email = $request->email;
+        $biodata->telepon = $request->telepon;
+        $biodata->alamat = $request->alamat;
+
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('foto', 'public');
+            $biodata->foto = $path;
+        }
+
+        $biodata->save();
+
+        return back()->with('success', 'Profil berhasil diperbarui.');
     }
 }

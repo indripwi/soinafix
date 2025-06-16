@@ -46,9 +46,6 @@ public function user()
         return $this->belongsTo(User::class);
     }
 
-public function biodata()
-{
-    return $this->hasOne(UserBiodata::class);
-}
+
 
 }

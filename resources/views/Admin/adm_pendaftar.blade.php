@@ -37,6 +37,9 @@
                             </select>
                         </div>
                         <div class="col-md-5 d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-search me-1"></i> Cari
+                            </button>
                             <a href="{{ route('pendaftar.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-sync-alt me-1"></i> Reset
                             </a>

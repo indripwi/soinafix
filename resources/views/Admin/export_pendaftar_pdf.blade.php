@@ -64,10 +64,8 @@
             <tr>
                 <th>No</th>
                 <th>Nama Pendaftar</th>
-                <th>NIK</th>
                 <th>Telepon</th>
                 <th>Jenis Kelamin</th>
-                <th>Tempat, Tanggal Lahir</th>
                 <th>Alamat</th>
                 <th>Status</th>
             </tr>
@@ -77,10 +75,8 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $p->nama_pendaftar }}</td>
-                <td>{{ $p->nik }}</td>
                 <td>{{ $p->nomor_telepon }}</td>
                 <td>{{ $p->jenis_kelamin }}</td>
-                <td>{{ $p->tempat_lahir }}, {{ \Carbon\Carbon::parse($p->tanggal_lahir)->format('d-m-Y') }}</td>
                 <td>{{ $p->alamat }}</td>
                 <td>{{ $p->status_verifikasi }}</td>
             </tr>

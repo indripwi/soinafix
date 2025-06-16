@@ -19,7 +19,7 @@ class Announcement extends Model
         'created_at',
     ];
 
-     /**
+    /**
      * Return the sluggable configuration array for this model.
      *
      * @return array
@@ -31,5 +31,10 @@ class Announcement extends Model
                 'source' => 'title'
             ]
         ];
+    }
+
+    public function images()
+    {
+        return $this->hasMany(AnnouncementImage::class);
     }
 }

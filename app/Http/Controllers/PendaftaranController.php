@@ -56,7 +56,7 @@ class PendaftaranController extends Controller
 
         Pendaftaran::create($data);
 
-        return redirect('pengguna/pendaftaran')->withToastSuccess('Pendaftaran berhasil ditambahkan!');
+        return redirect('pengguna/pendaftaran')->with('success', 'Pendaftaran berhasil ditambahkan!');
     }
 
     public function edit($slug)
@@ -100,7 +100,7 @@ class PendaftaranController extends Controller
 
         $pendaftaran->update($data);
 
-        return redirect('pengguna/pendaftaran')->withToastSuccess('Pendaftaran berhasil diperbarui!');
+       return redirect('pengguna/pendaftaran')->with('success', 'Pendaftaran berhasil diperbarui!');
     }
 
     public function hapus($slug)
@@ -115,7 +115,8 @@ class PendaftaranController extends Controller
 
         $pendaftaran->delete();
 
-        return redirect()->route('pendaftaran.index')->withToastSuccess('Pendaftaran berhasil dihapus.');
+        return redirect()->route('pendaftaran.index')->with('success', 'Pendaftaran berhasil dihapus.');
+
     }
 
     public function download(Request $request)

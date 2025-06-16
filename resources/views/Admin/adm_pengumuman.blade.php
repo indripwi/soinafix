@@ -30,11 +30,11 @@
                 <table class="table table-striped mt-3">
                     <thead>
                         <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Judul</th>
-                            <th scope="col">Gambar</th>
-                            <th scope="col">File PDF</th>
-                            <th scope="col">Aksi</th>
+                            <th>No</th>
+                            <th>Judul</th>
+                            <th>Gambar</th>
+                            <th>File PDF</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,10 +43,20 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $item->title }}</td>
                                 <td>
-                                    <img class="card-img-top"
-                                        src="{{ $item->gambar_url ? asset('storage/foto/' . $item->gambar_url) : asset('img/foto-tidak-ada.png') }}"
-                                        alt="Gambar Pengumuman" style="width: 100px; height: auto;" />
+                                    @if ($item->images && $item->images->count() > 0)
+                                        @foreach ($item->images as $image)
+                                            <img src="{{ asset('storage/' . $image->gambar_url) }}" alt="Gambar"
+                                                style="width: 100px; height: auto; margin: 5px;">
+                                        @endforeach
+                                    @elseif ($item->gambar_url)
+                                        <img src="{{ asset('storage/foto/' . $item->gambar_url) }}" alt="Gambar"
+                                            style="width: 100px; height: auto;">
+                                    @else
+                                        <em class="text-muted">Tidak ada gambar</em>
+                                    @endif
                                 </td>
+
+
                                 <td>
                                     @if ($item->pdf_file)
                                         <button type="button" class="btn btn-info btn-sm btn-preview-pdf"
@@ -58,7 +68,6 @@
                                         <em class="text-muted">Tidak ada file</em>
                                     @endif
                                 </td>
-
                                 <td>
                                     <a class="btn btn-success btn-sm" href="{{ route('pengumuman.edit', $item->slug) }}">
                                         Edit
@@ -95,13 +104,14 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="image">Gambar</label>
-                            <input type="file" name="image" id="image" class="form-control-file">
+                            <label for="images">Gambar (bisa lebih dari 1)</label>
+                            <input type="file" name="images[]" id="images" class="form-control-file" multiple>
                         </div>
+
 
                         <div class="form-group mb-3">
                             <label for="pdf_file">File PDF</label>
-                            <input type="file" name="pdf_file" id="pdf_file" class="form-control-file">
+                            <input type="file" name="pdf_file" id="pdf_file" class="form-control">
                         </div>
 
                         <small class="text-muted">*Isi minimal salah satu dari: Judul, Gambar, atau File PDF</small>
@@ -115,20 +125,30 @@
         </div>
     </div>
 
-    {{-- Load SweetAlert2 --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Modal Preview PDF -->
+    <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Preview File PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body" style="height: 80vh;">
+                    <iframe id="pdfViewer" src="" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {{-- Script untuk konfirmasi hapus --}}
+    {{-- SweetAlert & Script --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const deleteButtons = document.querySelectorAll('.btn-delete');
-
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
-
                     const form = this.closest('form');
-
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
                         text: "Data akan dihapus secara permanen!",
@@ -146,7 +166,20 @@
                 });
             });
 
-            // Notifikasi sukses setelah simpan/edit/hapus
+            const previewButtons = document.querySelectorAll('.btn-preview-pdf');
+            const pdfViewer = document.getElementById('pdfViewer');
+            previewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const pdfUrl = this.getAttribute('data-pdf-url');
+                    pdfViewer.src = pdfUrl;
+                });
+            });
+
+            const pdfModal = document.getElementById('pdfPreviewModal');
+            pdfModal.addEventListener('hidden.bs.modal', function() {
+                pdfViewer.src = '';
+            });
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -158,37 +191,4 @@
             @endif
         });
     </script>
-    <!-- Modal Preview PDF -->
-<div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl"> <!-- Ukuran modal besar -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="pdfPreviewModalLabel">Preview File PDF</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-            </div>
-            <div class="modal-body" style="height: 80vh;">
-                <iframe id="pdfViewer" src="" style="width: 100%; height: 100%;" frameborder="0"></iframe>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const previewButtons = document.querySelectorAll('.btn-preview-pdf');
-        const pdfViewer = document.getElementById('pdfViewer');
-
-        previewButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const pdfUrl = this.getAttribute('data-pdf-url');
-                pdfViewer.src = pdfUrl;
-            });
-        });
-
-        const pdfModal = document.getElementById('pdfPreviewModal');
-        pdfModal.addEventListener('hidden.bs.modal', function () {
-            pdfViewer.src = '';
-        });
-    });
-</script>
-
 @endsection

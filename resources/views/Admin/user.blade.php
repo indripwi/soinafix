@@ -25,9 +25,10 @@
                 </thead>
                 <tbody>
                     @foreach($users as $user)
+                    @php $loginUser = auth()->user(); @endphp
                     <tr>
                         <td>{{ $user->nama_user }}</td>
-                        <td>{{ $user->email }}</td>
+                        <td>{{ $loginUser->email }}</td>
                         <td>{{ $user->telepon }}</td>
                         <td>{{ $user->alamat }}</td>
                         <td>
@@ -50,6 +51,7 @@
                             </form>
                         </td>
                     </tr>
+                    
                     @endforeach
                 </tbody>
             </table>
@@ -69,11 +71,12 @@
                 <div class="mb-3">
                     <label class="form-label">Nama</label>
                     <input type="text" name="nama_user" class="form-control" value="{{ old('nama_user', $loginUser->nama_user ?? '') }}">
+                    @error('nama_user') <div class="text-danger">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email', $user->email ?? '') }}">
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $loginUser->email ?? '') }}">
                     @error('email') <div class="text-danger">{{ $message }}</div> @enderror
                 </div>
 

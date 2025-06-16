@@ -19,7 +19,7 @@ class PengumumanController extends Controller
 {
     if (
         !$request->filled('title') &&
-        !$request->hasFile('image') &&
+        !$request->hasFile('images') &&
         !$request->hasFile('pdf_file')
     ) {
         return back()->withErrors(['Harap isi minimal satu dari: Judul, Gambar, atau File PDF.'])->withInput();
@@ -27,35 +27,39 @@ class PengumumanController extends Controller
 
     $validated = $request->validate([
         'title' => 'nullable|string|max:255',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         'pdf_file' => 'nullable|mimes:pdf|max:2048',
     ]);
 
     $pengumuman = new Announcement();
-
     if ($request->filled('title')) {
         $pengumuman->title = $request->title;
     }
 
-    if ($request->hasFile('image')) {
-        $extension = $request->file('image')->getClientOriginalExtension();
-        $imageName = 'img-' . now()->timestamp . '.' . $extension;
-        $request->file('image')->storeAs('foto', $imageName);
-        $pengumuman->gambar_url = $imageName;
-    }
-
+    // PDF
     if ($request->hasFile('pdf_file')) {
         $pdfName = 'pdf-' . time() . '_' . $request->file('pdf_file')->getClientOriginalName();
         $request->file('pdf_file')->storeAs('announcement', $pdfName);
         $pengumuman->pdf_file = $pdfName;
     }
 
-    $pengumuman->slug = Str::slug($pengumuman->title . '-' . time());
+    $pengumuman->slug = Str::slug(($pengumuman->title ?? 'pengumuman') . '-' . time());
     $pengumuman->save();
 
-    // ⬇ Ini yang akan dikirim ke blade untuk trigger SweetAlert
+    // Gambar multiple
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $filename = 'img-' . now()->timestamp . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('announcement-images', $filename);
+            $pengumuman->images()->create([
+                'gambar_url' => 'announcement-images/' . $filename
+            ]);
+        }
+    }
+
     return redirect()->route('pengumuman.index')->with('success', 'Pengumuman berhasil ditambahkan!');
 }
+
 
 
    public function edit($slug)

@@ -194,7 +194,7 @@
                 @php
                     $biodata = Auth::user()->biodata;
                 @endphp
-
+                @php $loginUser = auth()->user(); @endphp
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
 
@@ -222,7 +222,7 @@
                                                 </div>
                                                 <div class="u-text">
                                                     <h4>{{ $biodata->nama_user ?? Auth::user()->name }}</h4>
-                                                    <p class="text-muted">{{ $biodata->email ?? Auth::user()->email }}
+                                                    <p class="text-muted">{{ $loginUser->email ?? Auth::user()->email }}
                                                     </p>
                                                     <a href="{{ route('user.index') }}"
                                                         class="btn btn-xs btn-secondary btn-sm">View Profile</a>
