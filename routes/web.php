@@ -105,20 +105,26 @@ Route::resource('biodata', UserBiodataController::class);
 Route::get('admin/user-edit/{slug}', [UserBiodataController::class, 'edit'])->name('user.edit');
 Route::get('admin/user-hapus/{slug}', [UserBiodataController::class, 'hapus'])->name('user.hapus');
 Route::get('admin/user-create/', [UserBiodataController::class, 'create'])->name('user.create');
+Route::put('/admin/user/{id}', [UserBiodataController::class, 'update'])->name('user.update');
+
 
 Route::post('/pendaftar/{id}/status', [PendaftarController::class, 'updateStatus'])->name('pendaftar.updateStatus');
 
 Route::resource('user', UserBiodataController::class);
 
 Route::middleware(['auth'])->group(function () {
-Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'pendaftaran'])->name('pendaftaran');
-Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
-Route::post('pengguna/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
-Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
-Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
-Route::delete('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
-Route::get('/pendaftaran/download/{file}', [PendaftaranController::class, 'download'])->name('pendaftaran.download');
+    Route::get('pengguna/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
+
+    Route::middleware('pendaftaran.buka')->group(function () {
+        Route::post('pengguna/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
+        Route::get('/pengguna/pendaftaran-edit/{slug}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
+        Route::put('/pengguna/pendaftaran-update/{slug}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
+    });
+
+    Route::delete('/pengguna/pendaftaran-hapus/{slug}', [PendaftaranController::class, 'hapus'])->name('pendaftaran.hapus');
+    Route::get('/pendaftaran/download/{file}', [PendaftaranController::class, 'download'])->name('pendaftaran.download');
 });
+
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/admin/setting', [SettingController::class, 'index'])->name('admin.setting.index');

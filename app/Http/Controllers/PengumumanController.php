@@ -75,8 +75,8 @@ class PengumumanController extends Controller
 
     $request->validate([
         'title' => 'nullable|string|max:255',
-        'new_images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'pdf_file' => 'nullable|mimes:pdf|max:2048',
+        'new_images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
+        'pdf_file' => 'nullable|mimes:pdf|max:5048',
     ]);
 
     if ($request->filled('title')) {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User; // Ganti dengan nama model Anda jika bukan "User"
 use App\Models\UserBiodata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -12,16 +11,34 @@ class UserBiodataController extends Controller
 {
     // Tampilkan semua data
     public function index()
-{
-    $users = UserBiodata::where('user_id', auth()->id())->get(); 
-    return view('Admin.user', compact('users'));
-}
+    {
+        $users = UserBiodata::where('user_id', auth()->id())->get();
+        return view('Admin.user', compact('users'));
+    }
 
-public function profil()
-{
-    $biodata = UserBiodata::where('user_id', auth()->id())->first();
-    return view('Admin.profil', compact('biodata'));
-}
+    public function profil()
+    {
+        $user = auth()->user();
+
+        // Cek apakah sudah punya biodata
+        $biodata = $user->biodata;
+
+        if (!$biodata) {
+            // Jika belum ada, buatkan dengan data default
+            $biodata = UserBiodata::create([
+                'user_id' => $user->id,
+                'nama_user' => $user->name ?? '',
+                'email' => $user->email,
+                'slug' => Str::slug($user->name ?? 'admin'),
+                'telepon' => '',
+                'alamat' => '',
+                'foto' => null,
+            ]);
+        }
+
+        return view('Admin.profil', compact('biodata'));
+    }
+
 
 
     // Tampilkan form tambah data
@@ -31,53 +48,53 @@ public function profil()
     }
 
     // Simpan data baru
-   public function store(Request $request)
-{
-    $request->validate([
-        'nama_user' => 'required|string|max:255',
-        'email' => 'required|email',
-        'telepon' => 'required|string|max:20',
-        'alamat' => 'required|string',
-        'foto' => 'nullable|image|max:2048',
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_user' => 'required|string|max:255',
+            'email' => 'required|email',
+            'telepon' => 'required|string|max:20',
+            'alamat' => 'required|string',
+            'foto' => 'nullable|image|max:2048',
+        ]);
 
-    $data = $request->except('foto');
-    $data['slug'] = Str::slug($request->nama_user);
-    $data['user_id'] = auth()->id();
+        $data = $request->except('foto');
+        $data['slug'] = Str::slug($request->nama_user);
+        $data['user_id'] = auth()->id();
 
-    // DEBUG STEP 1: cek apakah file dikirim
-    if (!$request->hasFile('foto')) {
-        dd('TIDAK ADA FILE FOTO DIUPLOAD');
+        // DEBUG STEP 1: cek apakah file dikirim
+        if (!$request->hasFile('foto')) {
+            dd('TIDAK ADA FILE FOTO DIUPLOAD');
+        }
+
+        $file = $request->file('foto');
+
+        // DEBUG STEP 2: cek apakah file valid
+        if (!$file->isValid()) {
+            dd('FILE FOTO TIDAK VALID');
+        }
+
+        // DEBUG STEP 3: simpan file
+        $path = $file->store('foto-users', 'public');
+
+        // DEBUG STEP 4: cek apakah berhasil disimpan ke disk
+        if (!Storage::disk('public')->exists($path)) {
+            dd('GAGAL SIMPAN FOTO KE STORAGE');
+        }
+
+        // DEBUG STEP 5: tampilkan path hasil upload
+        dd('FOTO BERHASIL DIUPLOAD KE: ' . $path);
+
+        // Jika sudah ok, baru lanjutkan
+        $data['foto'] = $path;
+
+        UserBiodata::updateOrCreate(
+            ['user_id' => auth()->id()],
+            $data
+        );
+
+        return redirect()->back()->with('success', 'Profil berhasil disimpan.');
     }
-
-    $file = $request->file('foto');
-
-    // DEBUG STEP 2: cek apakah file valid
-    if (!$file->isValid()) {
-        dd('FILE FOTO TIDAK VALID');
-    }
-
-    // DEBUG STEP 3: simpan file
-    $path = $file->store('foto-users', 'public');
-
-    // DEBUG STEP 4: cek apakah berhasil disimpan ke disk
-    if (!Storage::disk('public')->exists($path)) {
-        dd('GAGAL SIMPAN FOTO KE STORAGE');
-    }
-
-    // DEBUG STEP 5: tampilkan path hasil upload
-    dd('FOTO BERHASIL DIUPLOAD KE: ' . $path);
-
-    // Jika sudah ok, baru lanjutkan
-    $data['foto'] = $path;
-
-    UserBiodata::updateOrCreate(
-        ['user_id' => auth()->id()],
-        $data
-    );
-
-    return redirect()->back()->with('success', 'Profil berhasil disimpan.');
-}
 
 
 

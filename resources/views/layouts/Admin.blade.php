@@ -50,7 +50,7 @@
                 <div class="logo-header d-flex align-items-center" data-background-color="dark">
                     <a href="{{ route('dashboard') }}" class="logo d-flex align-items-center">
                         <img src="{{ asset('admin/img/soina.png') }}" alt="navbar brand" class="navbar-brand mt-3"
-                            height="70" />
+                            height="60" />
                         <span class="ms-3 text-white fw-bold d-inline-block mt-2"
                             style="font-size: 12px; line-height: 2;">Special Olympics Indonesia</span>
                     </a>
@@ -110,10 +110,11 @@
 
                         <li class="nav-item {{ request()->routeIs('pendaftar.index') ? 'active' : '' }}">
                             <a href="{{ route('pendaftar.index') }}">
-                                <i class="fas fa-users"></i>
+                                <i class="fas fa-user-check"></i> {{-- Ikon diganti dari fa-users ke fa-user-check --}}
                                 <p>Pendaftar</p>
                             </a>
                         </li>
+
 
                         <li class="nav-item {{ request()->routeIs('user.index') ? 'active' : '' }}">
                             <a href="{{ route('user.index') }}">
@@ -123,23 +124,24 @@
                         </li>
                         <li class="nav-item {{ request()->routeIs('admin.setting.index') ? 'active' : '' }}">
                             <a href="{{ route('admin.setting.index') }}">
-                                <i class="fas fa-user"></i>
+                                <i class="fas fa-cogs"></i> {{-- Ikon diganti dari fa-user ke fa-cogs --}}
                                 <p>Setting Pendaftaran</p>
                             </a>
                         </li>
+
                         <!-- Tambahkan item lainnya juga di luar dropdown -->
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="button" class="nav-link btn btn-link text-start" onclick="confirmLogout()">
-                                <i class="fas fa-sign-out-alt"></i> Log Out
-                            </button>
-                        </form>
-
-
-
-
-
+                        <li class="nav-item d-flex justify-content-center">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                                @csrf
+                                <button type="button" onclick="confirmLogout()"
+                                    class="nav-link d-flex align-items-center text-danger"
+                                    style="background: none; border: none; font-size: 18px;">
+                                    <i class="fas fa-sign-out-alt me-2"></i>
+                                    <span>Log Out</span>
+                                </button>
+                            </form>
+                        </li>
 
                         <!-- Tambahkan item lainnya juga di luar dropdown -->
                     </ul>
@@ -202,7 +204,7 @@
                             <li class="nav-item topbar-user dropdown hidden-caret">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
-                                    
+
                                     <div class="avatar-sm">
                                         <img src="{{ $biodata && $biodata->foto ? asset('storage/' . $biodata->foto) : asset('admin/img/logo-botak.jpg') }}"
                                             alt="Foto" class="avatar-img rounded-circle" />
@@ -222,7 +224,8 @@
                                                 </div>
                                                 <div class="u-text">
                                                     <h4>{{ $biodata->nama_user ?? Auth::user()->name }}</h4>
-                                                    <p class="text-muted">{{ $loginUser->email ?? Auth::user()->email }}
+                                                    <p class="text-muted">
+                                                        {{ $loginUser->email ?? Auth::user()->email }}
                                                     </p>
                                                     <a href="{{ route('user.index') }}"
                                                         class="btn btn-xs btn-secondary btn-sm">View Profile</a>

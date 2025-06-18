@@ -40,7 +40,9 @@
 
             <div class="col-md-6 mb-3">
                 <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" value="{{ $pendaftaran->tanggal_lahir }}" required>
+                <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" 
+       value="{{ \Carbon\Carbon::parse($pendaftaran->tanggal_lahir)->format('Y-m-d') }}" required>
+
             </div>
 
             <div class="col-md-12 mb-3">

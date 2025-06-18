@@ -11,41 +11,50 @@
 
     {{-- Card Pendaftar --}}
     <div class="col-md-6 col-lg-4">
-      <div class="card border-0 shadow rounded-4 p-3 h-100 hover-card">
-        <div class="text-center">
-          <div class="mb-3">
-            <i class="fas fa-users fa-3x text-white bg-gradient-primary p-3 rounded-circle shadow"></i>
+      <a href="{{ route('pendaftar.index') }}" class="text-decoration-none text-dark">
+        <div class="card border-0 shadow rounded-4 p-3 h-100 hover-card position-relative">
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="fas fa-users fa-3x text-white bg-gradient-primary p-3 rounded-circle shadow"></i>
+            </div>
+            <h6 class="text-secondary mb-1">Pendaftar</h6>
+            <h2 class="fw-bold">{{ number_format($jumlahPendaftar) }}</h2>
           </div>
-          <h6 class="text-secondary mb-1">Pendaftar</h6>
-          <h2 class="fw-bold">{{ number_format($jumlahPendaftar) }}</h2>
+          <span class="stretched-link"></span>
         </div>
-      </div>
+      </a>
     </div>
 
     {{-- Card Program --}}
     <div class="col-md-6 col-lg-4">
-      <div class="card border-0 shadow rounded-4 p-3 h-100 hover-card">
-        <div class="text-center">
-          <div class="mb-3">
-            <i class="fas fa-clipboard-list fa-3x text-white bg-gradient-info p-3 rounded-circle shadow"></i>
+      <a href="{{ route('olahraga.index') }}" class="text-decoration-none text-dark">
+        <div class="card border-0 shadow rounded-4 p-3 h-100 hover-card position-relative">
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="fas fa-clipboard-list fa-3x text-white bg-gradient-info p-3 rounded-circle shadow"></i>
+            </div>
+            <h6 class="text-secondary mb-1">Program</h6>
+            <h2 class="fw-bold">{{ number_format($jumlahProgram) }}</h2>
           </div>
-          <h6 class="text-secondary mb-1">Program</h6>
-          <h2 class="fw-bold">{{ number_format($jumlahProgram) }}</h2>
+          <span class="stretched-link"></span>
         </div>
-      </div>
+      </a>
     </div>
 
     {{-- Card Pengurus --}}
     <div class="col-md-6 col-lg-4">
-      <div class="card border-0 shadow rounded-4 p-3 h-100 hover-card">
-        <div class="text-center">
-          <div class="mb-3">
-            <i class="fas fa-user-tie fa-3x text-white bg-gradient-success p-3 rounded-circle shadow"></i>
+      <a href="{{ route('pengurus.index') }}" class="text-decoration-none text-dark">
+        <div class="card border-0 shadow rounded-4 p-3 h-100 hover-card position-relative">
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="fas fa-user-tie fa-3x text-white bg-gradient-success p-3 rounded-circle shadow"></i>
+            </div>
+            <h6 class="text-secondary mb-1">Pengurus</h6>
+            <h2 class="fw-bold">{{ number_format($jumlahPengurus) }}</h2>
           </div>
-          <h6 class="text-secondary mb-1">Pengurus</h6>
-          <h2 class="fw-bold">{{ number_format($jumlahPengurus) }}</h2>
+          <span class="stretched-link"></span>
         </div>
-      </div>
+      </a>
     </div>
 
   </div>

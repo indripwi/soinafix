@@ -13,6 +13,7 @@ use App\Notifications\ResetPasswordNotification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -55,22 +56,32 @@ class AuthController extends Controller
     }
 
     public function Registerprocess(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'email', 'max:100', 'unique:users'],
-            'password' => ['required', 'string', 'min:6'],
-        ]);
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:50'],
+        'email' => ['required', 'email', 'max:100', 'unique:users'],
+        'password' => ['required', 'string', 'min:6'],
+    ]);
+
+    try {
+        Log::info('Register user', $request->all());
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 2, // default pengguna biasa
+            'role_id' => 2,
         ]);
 
+        Log::info('User registered successfully');
+
         return redirect('/register')->with('status', 'Akun berhasil dibuat. Silakan login.');
+    } catch (\Exception $e) {
+        Log::error('Error saat register: ' . $e->getMessage());
+        return back()->with('message', 'Terjadi kesalahan saat mendaftar.')->withInput();
     }
+}
+
 
     public function forgotPasswordForm()
     {
@@ -89,7 +100,7 @@ class AuthController extends Controller
 
         $token = Str::random(64);
 
-        DB::table('password_resets')->updateOrInsert(
+        DB::table('password_resets_pendaftaran')->updateOrInsert(
             ['email' => $request->email],
             [
                 'token' => $token,
@@ -115,7 +126,7 @@ class AuthController extends Controller
             'token' => 'required'
         ]);
 
-        $record = DB::table('password_resets')
+        $record = DB::table('password_resets_pendaftaran')
             ->where('email', $request->email)
             ->where('token', $request->token)
             ->first();
@@ -141,7 +152,7 @@ class AuthController extends Controller
             'token' => 'required'
         ]);
 
-        $record = DB::table('password_resets')
+        $record = DB::table('password_resets_pendaftaran')
             ->where('email', $request->email)
             ->where('token', $request->token)
             ->first();
@@ -154,7 +165,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        DB::table('password_resets')->where('email', $request->email)->delete();
+        DB::table('password_resets_pendaftaran')->where('email', $request->email)->delete();
 
         return redirect('/login')->with('status', 'Password berhasil direset. Silakan login.');
     }

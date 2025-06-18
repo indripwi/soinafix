@@ -104,7 +104,6 @@
                     <div class="social-links d-flex mt-4">
                         <a href="https://www.instagram.com/soinabanjarmasin?igsh=MTNmOHNlam5senc2Zg=="><i
                                 class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-youtube"></i></a>
                     </div>
                 </div>
 
