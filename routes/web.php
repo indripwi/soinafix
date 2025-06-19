@@ -97,6 +97,9 @@ Route::get('admin/pendaftar', [PendaftarController::class, 'index'])->name('pend
 Route::get('/admin/pendaftar/export', [PendaftarController::class, 'export'])->name('pendaftar.export');
 Route::get('/pendaftar/download', [PendaftaranController::class, 'download'])->name('pendaftar.download');
 Route::delete('/admin/pendaftar-hapus/{slug}', [PendaftarController::class, 'hapus'])->name('pendaftar.hapus');
+Route::get('/admin/arsip-lolos', [PendaftarController::class, 'arsipLolos'])->name('pendaftar.arsipLolos');
+Route::get('/admin/pendaftar/{slug}', [PendaftarController::class, 'show'])->name('pendaftar.detail');
+Route::get('/admin/arsip/export', [PendaftarController::class, 'exportLolosPdf'])->name('pendaftar.exportLolosPdf');
 
 Route::get('/admin/profil', [UserBiodataController::class, 'profile'])->name('admin.profil');
 Route::get('admin/user', [UserBiodataController::class, 'index'])->name('user.index');

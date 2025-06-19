@@ -110,8 +110,15 @@
 
                         <li class="nav-item {{ request()->routeIs('pendaftar.index') ? 'active' : '' }}">
                             <a href="{{ route('pendaftar.index') }}">
-                                <i class="fas fa-user-check"></i> {{-- Ikon diganti dari fa-users ke fa-user-check --}}
+                                <i class="fas fa-user-check"></i> 
                                 <p>Pendaftar</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item {{ request()->routeIs('pendaftar.arsipLolos') ? 'active' : '' }}">
+                            <a href="{{ route('pendaftar.arsipLolos') }}">
+                                <i class="fas fa-archive"></i> 
+                                <p>Arsip Lolos</p>
                             </a>
                         </li>
 

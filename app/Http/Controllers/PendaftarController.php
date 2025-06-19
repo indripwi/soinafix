@@ -147,7 +147,6 @@ class PendaftarController extends Controller
         }
 
         return Storage::disk('public')->download($file);
-        
     }
 
 
@@ -165,5 +164,26 @@ class PendaftarController extends Controller
         Log::info('Status updated: ' . $pendaftar->status_verifikasi);
 
         return redirect()->route('pendaftar.index')->withToastSuccess('Status verifikasi berhasil diperbarui.');
+    }
+
+    public function arsipLolos()
+    {
+        $pendaftarans = Pendaftaran::where('status_verifikasi', 'lolos')->get();
+        return view('admin.arsip-lolos', compact('pendaftarans'));
+    }
+
+    public function show($slug)
+    {
+        $pendaftaran = Pendaftaran::where('slug', $slug)->firstOrFail();
+        return view('admin.pendaftar-detail', compact('pendaftaran'));
+    }
+
+    public function exportLolosPdf()
+    {
+        $pendaftarans = Pendaftaran::where('status_verifikasi', 'lolos')->get();
+
+        $pdf = Pdf::loadView('admin.pendaftar-lolos-pdf', compact('pendaftarans'));
+
+        return $pdf->download('arsip-pendaftar-lolos.pdf');
     }
 }
