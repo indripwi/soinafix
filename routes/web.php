@@ -19,6 +19,8 @@ use App\Models\Pengumuman;
 use App\Models\Pengurus;
 use App\Models\Prestasi;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\PendaftarLolosExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 /*
@@ -100,6 +102,9 @@ Route::delete('/admin/pendaftar-hapus/{slug}', [PendaftarController::class, 'hap
 Route::get('/admin/arsip-lolos', [PendaftarController::class, 'arsipLolos'])->name('pendaftar.arsipLolos');
 Route::get('/admin/pendaftar/{slug}', [PendaftarController::class, 'show'])->name('pendaftar.detail');
 Route::get('/admin/arsip/export', [PendaftarController::class, 'exportLolosPdf'])->name('pendaftar.exportLolosPdf');
+Route::get('/admin/arsip/export-excel', function () {
+    return Excel::download(new PendaftarLolosExport, 'arsip-pendaftar-lolos.xlsx');
+})->name('pendaftar.exportLolosExcel');
 
 Route::get('/admin/profil', [UserBiodataController::class, 'profile'])->name('admin.profil');
 Route::get('admin/user', [UserBiodataController::class, 'index'])->name('user.index');

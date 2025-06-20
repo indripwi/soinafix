@@ -6,9 +6,10 @@
         <div class="table-responsive">
             <table class="table table-bordered text-center">
                 <thead class="table-success">
-                    <a href="{{ route('pendaftar.exportLolosPdf') }}" class="btn btn-danger mb-3">
-                        <i class="fas fa-file-pdf"></i> Export PDF
+                    <a href="{{ route('pendaftar.exportLolosExcel') }}" class="btn btn-success mb-3">
+                        <i class="fas fa-file-excel"></i> Export Excel
                     </a>
+
 
                     <tr>
                         <th>No</th>
